@@ -1,7 +1,7 @@
 package com.pwgp.blog.controller;
 
 import com.pwgp.blog.dto.auth.AuthRequest;
-import com.pwgp.blog.dto.user.UserRequest;
+import com.pwgp.blog.dto.auth.RegistrationRequest;
 import com.pwgp.blog.mapper.UserMapper;
 import com.pwgp.blog.service.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class AuthController {
 
     @GetMapping("/registration")
     public String registerPage(@RequestParam(value = "confirmToken", required = false) String confirmToken, Model model) {
-        model.addAttribute("user", new UserRequest());
+        model.addAttribute("user", new RegistrationRequest());
         if(confirmToken != null) {
             tokenService.verify(confirmToken);
         }
@@ -31,9 +31,9 @@ public class AuthController {
         return "auth/login";
     }
 
-    @PostMapping("/registration")
-    public String register(@ModelAttribute("user") UserRequest userRequest) {
-        userMapper.create(userRequest);
+    @PostMapping(value = "/registration")
+    public String register(@ModelAttribute("user") RegistrationRequest registrationRequest) {
+        userMapper.create(registrationRequest);
         return "redirect:/";
     }
 }

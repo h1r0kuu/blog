@@ -1,8 +1,9 @@
 package com.pwgp.blog.mapper;
 
-import com.pwgp.blog.dto.user.UserRequest;
+import com.pwgp.blog.dto.auth.RegistrationRequest;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.User;
+import com.pwgp.blog.service.ImageService;
 import com.pwgp.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -14,9 +15,12 @@ public class UserMapper {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final ImageService imageService;
 
-    public UserResponse create(UserRequest userRequest) {
-        User user = modelMapper.map(userRequest, User.class);
+    public UserResponse create(RegistrationRequest registrationRequest) {
+        User user = modelMapper.map(registrationRequest, User.class);
+        String imageUrl = imageService.upload(registrationRequest.getAvatar());
+        user.setAvatar(imageUrl);
         return modelMapper.map(userService.create(user), UserResponse.class);
     }
 
