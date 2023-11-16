@@ -11,11 +11,11 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="post" th:action="@{/registration}" th:object="${user}">
+    <form method="post" th:action="@{/registration}" th:object="${user}" enctype="multipart/form-data">
         <input type="text" th:field="*{username}" placeholder="username">
         <input type="password" th:field="*{password}" placeholder="password">
         <input type="email" th:field="*{email}" placeholder="email">
-<!--        <input type="file" th:field="*{avatar}" placeholder="image">-->
+        <input type="file" th:field="*{avatar}">
         <button type="submit">Register</button>
     </form>
 </body>
