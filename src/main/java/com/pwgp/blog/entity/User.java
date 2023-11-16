@@ -26,6 +26,15 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "enabled")
+    private Boolean enabled = false;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private VerificationToken verificationToken;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

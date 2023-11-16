@@ -3,22 +3,25 @@ package com.pwgp.blog.controller;
 import com.pwgp.blog.dto.auth.AuthRequest;
 import com.pwgp.blog.dto.user.UserRequest;
 import com.pwgp.blog.mapper.UserMapper;
+import com.pwgp.blog.service.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
 
     private final UserMapper userMapper;
+    private final VerificationTokenService tokenService;
 
     @GetMapping("/registration")
-    public String registerPage(Model model) {
+    public String registerPage(@RequestParam(value = "confirmToken", required = false) String confirmToken, Model model) {
         model.addAttribute("user", new UserRequest());
+        if(confirmToken != null) {
+            tokenService.verify(confirmToken);
+        }
         return "auth/registration";
     }
 
@@ -31,6 +34,6 @@ public class AuthController {
     @PostMapping("/registration")
     public String register(@ModelAttribute("user") UserRequest userRequest) {
         userMapper.create(userRequest);
-        return "";
+        return "redirect:/";
     }
 }
