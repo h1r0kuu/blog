@@ -51,6 +51,10 @@ public class WebSecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((req, res, auth) -> SecurityContextHolder.clearContext())
                 )
+                .rememberMe(remember -> remember
+                        .key("secret-key")
+                        .tokenValiditySeconds(28800)
+                        .rememberMeParameter("remember-me"))
                 .build();
     }
 
