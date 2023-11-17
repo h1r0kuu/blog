@@ -23,4 +23,11 @@ public class EmailServiceImpl implements EmailService {
         message.setText(body, false);
         javaMailSender.send(mimeMessage);
     }
+
+    @Override
+    public void sendVerificationToken(String to, String token) throws MessagingException {
+        String confirmationUrl = "/registration?confirmToken=" + token;
+        String message = "http://localhost:8080" + confirmationUrl;
+        sendEmail(to, "registration", message);
+    }
 }

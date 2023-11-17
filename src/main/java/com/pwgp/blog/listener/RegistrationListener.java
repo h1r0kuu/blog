@@ -23,13 +23,10 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setUser(user);
         tokenService.create(verificationToken);
-
         String recipientAddress = user.getEmail();
-        String confirmationUrl = "/registration?confirmToken=" + verificationToken.getToken();
-        String message = "http://localhost:8080" + confirmationUrl;
 
         try {
-            emailService.sendEmail(recipientAddress, "registration", message);
+            emailService.sendVerificationToken(recipientAddress, verificationToken.getToken());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

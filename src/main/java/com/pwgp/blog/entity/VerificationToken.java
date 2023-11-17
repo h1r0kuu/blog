@@ -24,15 +24,20 @@ public class VerificationToken {
     @Column(name = "expired_time")
     private LocalDateTime expiredDateTime;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
     public VerificationToken() {
+        newToken();
+    }
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isBefore(expiredDateTime);
+    }
+
+    public void newToken() {
         this.token = UUID.randomUUID().toString();;
+        this.expiredDateTime = LocalDateTime.now().plusMinutes(15L);
     }
 }
