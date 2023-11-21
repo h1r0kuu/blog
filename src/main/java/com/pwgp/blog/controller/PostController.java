@@ -61,7 +61,9 @@ public class PostController {
 
     @GetMapping("/posts/{post_id}")
     public String renderPost(@PathVariable("post_id") Long post_id, Model model, @AuthenticationPrincipal User user){
-        model.addAttribute("post", postService.FindPostById(post_id));
+        Post post = postService.FindPostById(post_id);
+        if(user != null) postService.registerUserView(user, post);
+        model.addAttribute("post", post);
         model.addAttribute("user", user);
         return "post/post";
     }
