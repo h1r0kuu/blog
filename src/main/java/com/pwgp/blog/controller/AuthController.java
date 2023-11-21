@@ -2,11 +2,13 @@ package com.pwgp.blog.controller;
 
 import com.pwgp.blog.dto.auth.AuthRequest;
 import com.pwgp.blog.dto.auth.RegistrationRequest;
+import com.pwgp.blog.entity.User;
 import com.pwgp.blog.mapper.UserMapper;
 import com.pwgp.blog.service.VerificationTokenService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,8 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginPage(Model model) {
+    public String loginPage(Model model, @AuthenticationPrincipal User user) {
+        if(user != null) return "redirect:/";
         model.addAttribute("auth", new AuthRequest());
         return "auth/login";
     }
