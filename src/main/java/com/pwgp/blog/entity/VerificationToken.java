@@ -33,7 +33,7 @@ public class VerificationToken {
     }
 
     public boolean isExpired() {
-        return LocalDateTime.now().isBefore(expiredDateTime);
+        return LocalDateTime.now().isAfter(expiredDateTime);
     }
 
     public void newToken() {

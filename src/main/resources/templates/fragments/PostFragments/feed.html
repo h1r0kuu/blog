@@ -1,0 +1,35 @@
+<div class="container" style="margin-top: 50px;max-width: 100%;" th:fragment="feed">
+    <div th:each="post: ${posts}" class="d-flex mx-auto" style="background: #ffffff;width: 40%;margin-top: 25px;">
+        <div class="container" style="box-shadow: 12px 12px 20px 0px rgb(180,176,176);">
+            <div class="row">
+                <div class="col-md-12" style="padding-top: 10px;padding-right: 10px;margin-top: 0px;padding-left: 15px;">
+                    <img th:src="${post.creator.avatar}" class="rounded-circle d-inline-flex" src="assets/img/2be2870ad4b37cc22858aacf9d13692a.jpg" style="min-height: 50px;max-width: 50px;max-height: 50px;min-width: 50px;">
+                    <h1 th:text="${post.creator.username}" class="d-inline-flex d-sm-inline-flex d-md-inline-flex d-lg-inline-flex d-xl-inline-flex d-xxl-inline-flex justify-content-center align-items-center align-content-center align-self-center my-auto justify-content-xl-start align-items-xl-center" style="color: rgb(0,0,0);font-size: 20px;margin: 0px;max-width: 25%;margin-left: 10px;position: relative;display: inline-flex;text-align: left;">MeZerius</h1>
+                    <h1 th:text="${post.createdAt}" class="d-inline-flex d-sm-inline-flex d-md-inline-flex d-lg-inline-flex d-xl-inline-flex d-xxl-inline-flex justify-content-center align-items-center align-content-center align-self-center my-auto justify-content-xl-start align-items-xl-center" style="color: rgb(85,85,85);font-size: 15px;margin: 0px;max-width: 25%;margin-left: 10px;position: relative;display: inline-flex;text-align: left;font-style: italic;">2 hours ago</h1>
+                    <h1 th:text="${post.category.name}" class="d-inline-flex float-end d-sm-inline-flex d-md-inline-flex d-lg-inline-flex d-xl-inline-flex d-xxl-inline-flex justify-content-xl-center" style="color: rgb(0,0,0);font-size: 20px;margin: 0px;max-width: 25%;margin-left: 10px;position: relative;display: inline-flex;text-align: right;border: 2px solid rgb(0,0,0);border-radius: 8px;padding: 5px;">Nature</h1>
+                    <h1 th:text="${post.title}" class="d-flex align-items-center align-content-center justify-content-xl-start align-items-xl-center" style="color: rgb(0,0,0);font-size: 25px;margin: 0px;max-width: 100%;position: relative;display: inline-flex;text-align: left;margin-top: 20px;font-weight: bold;">Artificial intelligence at Google: from old projects to new achievements</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xl-12" style="padding-left: 15px;padding-top: 10px;"><i class="far fa-eye" style="color: rgb(101,101,101);font-size: 20px;width: 22.5px;height: 20px;"></i>
+                    <h1 th:text="${post.views.size()}" class="d-inline-flex align-items-center align-content-center justify-content-xl-start align-items-xl-center" style="color: rgb(101,101,101);font-size: 20px;margin: 0px;max-width: 15%;position: relative;display: inline-flex;text-align: left;font-weight: bold;margin-left: 5px;">225</h1>
+                    <p th:text="${#strings.listJoin(post.tags.![name], ', ')}" style="color: rgb(0,0,0);padding-top: 0px;margin-top: 5px;"></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><img th:src="${post.posterUrl}" src="assets/img/2be2870ad4b37cc22858aacf9d13692a.jpg" style="max-width: 100%;min-width: 100%;max-height: 400px;"></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p th:text="${#strings.abbreviate(post.body, 300)}" style="color: rgb(0,0,0);margin-top: 10px;font-size: 16px;text-align: left;">Google spends quite a lot of resources on the development of projects that cannot be called critical for the business. And there are many such projects - from space to artificial intelligence. True, the importance of the latter has grown over the years, so that now developments in the AI industry are becoming really important. Well, it all started many years ago. Let's remember how it all began and what the corporation is trying to implement now.<br></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="margin-bottom: 10px;">
+                    <a th:href="@{/posts/{post_id}(post_id=${post.id})}"><button class="btn btn-primary d-flex" type="button">Read more...</button><i class="far fa-heart" style="background: rgba(255,255,255,0);color: rgb(108,108,108);font-size: 22px;margin-top: 10px;"></i></a>
+                    <h1 th:text="${post.marks.size()}" class="d-inline-flex align-items-center align-content-center justify-content-xl-start align-items-xl-center" style="color: rgb(108,108,108);font-size: 22px;margin: 0px;max-width: 100%;position: relative;display: inline-flex;text-align: left;margin-top: 20px;font-weight: bold;margin-bottom: 0px;letter-spacing: -3px;margin-left: -1px;">+1</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

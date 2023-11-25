@@ -1,0 +1,51 @@
+<!doctype html >
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head th:replace="~{fragments/head :: head(title='Post Creation')}"></head>
+<style>
+    body{
+        background-color:rgb(54, 69, 79);
+        color: white;
+    }
+</style>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div style="width:50%; margin-left:25%;">
+    <form role="form" method="post" th:action="@{/post/create}" th:object="${post}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Post Title</label>
+            <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="Enter post title">
+        </div>
+        <div class="form-group">
+            <label for="photoFile">Example file input</label>
+            <input type="file" class="form-control-file" accept="image/*" id="photoFile" th:field="*{poster}">
+        </div>
+        <div class="form-group">
+            <label for="category">Select post category</label>
+            <select class="form-control" id="category" th:field="*{category}">
+                <option th:each="category: ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="tags">Select post tags</label>
+            <select multiple class="form-control" id="tags" th:field="*{tags}">
+                <option th:each="tag : ${tags}" th:text="${tag.name}" th:value="${tag.id}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="postBody">Enter your post' text</label>
+            <textarea class="form-control" id="postBody" th:field="*{body}" rows="3"></textarea>
+        </div>
+
+
+        <input type="hidden" th:field="*{creator}" th:value="55">
+
+        <button type="submit" class="btn btn-primary mu-6">Create</button>
+    </form>
+</div>
+
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:replace="~{fragments/scripts}"></div>
+</body>
+</html>

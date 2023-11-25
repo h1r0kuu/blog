@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Table(name = "\"users\"")
 @Entity
@@ -37,6 +39,12 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private VerificationToken verificationToken;
+
+    @OneToMany(mappedBy = "creator")
+    private Set<Post> posts = new HashSet<Post>();
+
+    @ManyToMany(mappedBy = "views")
+    private Set<Post> viewedPosts = new HashSet<Post>();
 
     @CreationTimestamp
     @Column(name = "created_at")
