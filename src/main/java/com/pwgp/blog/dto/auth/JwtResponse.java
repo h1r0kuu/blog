@@ -1,5 +1,6 @@
 package com.pwgp.blog.dto.auth;
 
+import com.pwgp.blog.dto.user.UserResponse;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +8,5 @@ import lombok.Data;
 @Data
 public class JwtResponse {
     private String jwt;
-    private String username;
-    private String email;
+    private UserResponse user;
 }

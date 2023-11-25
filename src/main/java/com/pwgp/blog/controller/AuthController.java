@@ -3,6 +3,7 @@ package com.pwgp.blog.controller;
 import com.pwgp.blog.dto.auth.AuthRequest;
 import com.pwgp.blog.dto.auth.JwtResponse;
 import com.pwgp.blog.dto.auth.RegistrationRequest;
+import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.mapper.UserMapper;
 import com.pwgp.blog.security.jwt.JwtUtils;
@@ -10,6 +11,7 @@ import com.pwgp.blog.service.VerificationTokenService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +29,7 @@ public class AuthController {
     private final VerificationTokenService tokenService;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final ModelMapper modelMapper;
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody AuthRequest authRequest) {
@@ -39,8 +42,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(JwtResponse.builder()
                         .jwt(jwt)
-                        .username(user.getUsername())
-                        .email(user.getEmail()).build());
+                        .user(modelMapper.map(user, UserResponse.class)).build());
     }
 
     @PostMapping(value = "/registration")
