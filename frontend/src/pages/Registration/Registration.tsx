@@ -2,16 +2,31 @@ import { ReactElement } from "react"
 import {SubmitHandler, useForm} from "react-hook-form";
 import AuthService from "../../services/AuthService";
 import {RegistrationRequest} from "../../models/registration/RegistrationRequest";
+import {Link, useNavigate} from "react-router-dom";
+import {HOME, LOGIN} from "../../constants/pathConstants";
 
 const Registration = (): ReactElement => {
+  const nav = useNavigate();
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: {errors}
   } = useForm<RegistrationRequest>()
 
   const onSubmit: SubmitHandler<RegistrationRequest> = (data: RegistrationRequest) => {
-    AuthService.register(data).then(r => console.log(r))
+    AuthService.register(data).then(res => {
+      nav(HOME)
+    }).catch(e => {
+      const errors = e.response.data
+      Object.keys(errors).forEach((key: any) => {
+        setError(key, {
+          type: "server",
+          message: errors[key]
+        })
+      })
+    })
   }
 
   return (
@@ -23,19 +38,25 @@ const Registration = (): ReactElement => {
               <h5 className="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
               <form method="post" encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-floating mb-3">
-                  <input type="text" className="form-control" id="floatingEmail" placeholder="Email" {...register("email")} />
-                  <label htmlFor="floatingEmail">Email</label>
-                </div>
-                <div className="form-floating mb-3">
-                  <input type="text" className="form-control" id="floatingInput" placeholder="Username" {...register("username")} />
+                  <input type="text" className={`form-control ${errors.username ? 'is-invalid' : ''}`} id="floatingInput" placeholder="Username" {...register("username")} />
                   <label htmlFor="floatingInput">Username</label>
+                  <div className="invalid-feedback">
+                    {errors.username?.message}.
+                  </div>
                 </div>
                 <div className="form-floating mb-3">
-                  <input type="password" className="form-control" id="floatingPassword" placeholder="Password" {...register("password")} />
+                  <input type="text" className={`form-control ${errors.email ? 'is-invalid' : ''}`} id="floatingEmail" placeholder="Email" {...register("email")} />
+                  <label htmlFor="floatingEmail">Email</label>
+                  <div className="invalid-feedback">
+                    {errors.email?.message}.
+                  </div>
+                </div>
+                <div className="form-floating mb-3">
+                  <input type="password" className={`form-control ${errors.password ? 'is-invalid' : ''}`} id="floatingPassword" placeholder="Password" {...register("password")} />
                   <label htmlFor="floatingPassword">Password</label>
                 </div>
                 <div className="form-floating mb-3">
-                  <input type="file" className="form-control" id="floatingAvatar" {...register("avatar")} />
+                  <input type="file" className={`form-control ${errors.avatar ? 'is-invalid' : ''}`} id="floatingAvatar" {...register("avatar")} />
                 </div>
 
                 <div className="d-grid">
@@ -45,7 +66,7 @@ const Registration = (): ReactElement => {
                 </div>
                 <div className="my-1">
                   <p>
-                    Already have an account? <a href="/login">Login</a>
+                    Already have an account? <Link to={LOGIN}>Login</Link>
                   </p>
                 </div>
                 <hr className="my-4" />
@@ -68,4 +89,4 @@ const Registration = (): ReactElement => {
   )
 }
 
-export default Registration
+export default Registration;

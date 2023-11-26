@@ -1,8 +1,10 @@
 import {ReactElement} from "react";
 import {useAuth} from "../../context/AuthContext";
+import {Link} from "react-router-dom";
+import {LOGIN, REGISTRATION} from "../../constants/pathConstants";
 
 const Header = (): ReactElement => {
-    const {isAuthenticated} = useAuth();
+    const {isAuthenticated, logout} = useAuth();
     return (
         <header>
             <nav className="navbar navbar-dark navbar-expand-md bg-dark">
@@ -21,11 +23,14 @@ const Header = (): ReactElement => {
                         </div>
                     </div>
                     {isAuthenticated() ?
-                        <img className="rounded-circle bg-primary border border-1 border-white" width="30" height="30" src="" />
+                        <>
+                            <img className="rounded-circle bg-primary border border-1 border-white" width="30" height="30" src="" />
+                            <button className="btn btn-primary" type="button" onClick={() => logout()}>Logout</button>
+                        </>
                     :
                         <>
-                            <button className="btn btn-primary me-lg-3" type="button">Login</button>
-                            <button className="btn btn-primary" type="button">Register</button>
+                            <Link to={LOGIN} className="btn btn-primary me-lg-3" type="button">Login</Link>
+                            <Link to={REGISTRATION} className="btn btn-primary" type="button">Register</Link>
                         </>
                     }
                 </div>

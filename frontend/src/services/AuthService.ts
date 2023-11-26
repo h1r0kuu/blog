@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {LOGIN_API_URL, REGISTRATION_API_URL} from "../constants/apiConstants";
+import {LOGIN_API_URL, LOGOUT_API_URL, REGISTRATION_API_URL} from "../constants/apiConstants";
 import api from "../http";
 import {AuthResponse} from "../models/auth/AuthRespose";
 import {AuthRequest} from "../models/auth/AuthRequest";
@@ -11,10 +11,14 @@ export default class AuthService {
     }
 
     static async register(data: RegistrationRequest): Promise<AxiosResponse<AuthResponse>> {
-        return api.post<AuthResponse>(LOGIN_API_URL, data)
+        return api.post<AuthResponse>(REGISTRATION_API_URL, data, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
     }
 
-    // static async logout(): Promise<void> {
-    //     api.post()
-    // }
+    static async logout(): Promise<void> {
+        await api.post(LOGOUT_API_URL)
+    }
 }

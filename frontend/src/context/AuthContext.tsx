@@ -12,6 +12,8 @@ import React, {
 import AuthService from "../services/AuthService";
 import {AuthRequest} from "../models/auth/AuthRequest";
 import {UserResponse} from "../models/user/UserResponse";
+import {useNavigate} from "react-router-dom";
+import {HOME} from "../constants/pathConstants";
 
 type AuthContextType = {
     user: UserResponse;
@@ -25,6 +27,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 const AuthProvider: FC<any> = ({children}): ReactElement => {
     const [user, setUser] = useState<UserResponse>({} as UserResponse)
+    const nav = useNavigate()
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user")
@@ -36,12 +39,14 @@ const AuthProvider: FC<any> = ({children}): ReactElement => {
             const user = JSON.stringify(res.data.user)
             localStorage.setItem("user", user)
             setUser(JSON.parse(user))
+            nav(HOME)
         })
     }
 
     const logout = () => {
         localStorage.removeItem('user')
         setUser({} as UserResponse)
+        AuthService.logout()
     }
 
     const isAuthenticated = (): boolean => {

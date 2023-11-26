@@ -18,6 +18,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,7 +47,7 @@ public class AuthController {
                         .user(modelMapper.map(user, UserResponse.class)).build());
     }
 
-    @PostMapping(value = "/registration")
+    @PostMapping("/registration")
     public String register(@Valid @ModelAttribute RegistrationRequest registrationRequest,
                            @RequestParam(value = "confirmToken", required = false) String token) {
         userMapper.create(registrationRequest);
