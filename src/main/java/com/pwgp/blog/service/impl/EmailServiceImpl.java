@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendVerificationToken(String to, String token) throws MessagingException {
-        String confirmationUrl = "/registration?confirmToken=" + token;
+        String confirmationUrl = "api/v1/auth/registration?confirmToken=" + token;
         String message = "http://localhost:8080" + confirmationUrl;
         sendEmail(to, "registration", message);
     }
