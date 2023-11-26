@@ -2,6 +2,9 @@ package com.pwgp.blog.service.impl;
 
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.event.OnRegistrationCompleteEvent;
+import com.pwgp.blog.exception.EmailAlreadyTakenException;
+import com.pwgp.blog.exception.UserAlreadyExistException;
+import com.pwgp.blog.exception.UsernameNotFoundException;
 import com.pwgp.blog.repository.UserRepository;
 import com.pwgp.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +24,11 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
 
         if(findByUsername(user.getUsername()) != null) {
-            throw new RuntimeException("User already exist");
+            throw new UserAlreadyExistException("User already exist");
         }
 
         if(userRepository.findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("Email is taken");
+            throw new EmailAlreadyTakenException("Email is taken");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -38,6 +41,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 }
