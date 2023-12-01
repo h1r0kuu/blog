@@ -1,6 +1,6 @@
-import {UserResponse} from "../user/UserResponse";
+import { UserResponse } from "../user/UserResponse"
 
 export type AuthResponse = {
-    jwt: string;
-    user: UserResponse;
+  jwt: string
+  user: UserResponse
 }

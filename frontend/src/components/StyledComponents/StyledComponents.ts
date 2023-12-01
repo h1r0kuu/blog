@@ -1,4 +1,4 @@
-import { Box, Button, Card, styled, Tab } from "@mui/material"
+import { alpha, Box, Button, Card, styled, Tab, TextField, TextFieldProps } from "@mui/material"
 import { TabList, TabPanel } from "@mui/lab"
 
 export const ContentWrapper = styled(Box)(() => ({
@@ -68,4 +68,52 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   fontWeight: 500,
   borderRadius: "11px",
   color: theme.palette.text.disabled,
+}))
+
+export const ButtonWrapper = styled(Box)(({ theme }) => ({
+  width: 100,
+  height: 100,
+  display: "flex",
+  borderRadius: "50%",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor:
+    theme.palette.mode === "light" ? theme.palette.secondary.main[200] : alpha(theme.palette.primary.main, 0.1),
+}))
+
+export const UploadButton = styled(Box)(({ theme }) => ({
+  width: 50,
+  height: 50,
+  display: "flex",
+  borderRadius: "50%",
+  border: "2px solid",
+  alignItems: "center",
+  justifyContent: "center",
+  borderColor: theme.palette.background.paper,
+  backgroundColor:
+    theme.palette.mode === "light" ? theme.palette.secondary.main[400] : alpha(theme.palette.background.paper, 0.9),
+}))
+
+export const SwitchWrapper = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+  marginTop: 10,
+}))
+
+export const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
+  "& .MuiOutlinedInput-input": {
+    fontWeight: 500,
+    color: theme.palette.text.primary,
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderRadius: "8px",
+    border: "2px solid",
+    borderColor:
+      theme.palette.mode === "light" ? theme.palette.secondary.main[300] : alpha(theme.palette.primary.main, 0.1),
+  },
+  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+    borderColor: theme.palette.secondary.main[300],
+  },
 }))
