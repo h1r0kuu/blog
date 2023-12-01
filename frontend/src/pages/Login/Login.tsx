@@ -5,6 +5,9 @@ import { useAuth } from "../../context/AuthContext"
 import { Box, Button, Checkbox, Container, FormControlLabel, Grid, TextField, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import { REGISTRATION } from "../../constants/pathConstants"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { authSchema } from "../../schemas/validationSchemas"
+import { StyledTextField } from "../../components/StyledComponents/StyledComponents"
 
 const Login = (): ReactElement => {
   const auth = useAuth()
@@ -12,7 +15,9 @@ const Login = (): ReactElement => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthRequest>()
+  } = useForm<AuthRequest>({
+    resolver: yupResolver(authSchema),
+  })
 
   const onSubmit: SubmitHandler<AuthRequest> = (data: AuthRequest) => {
     auth.login(data)
@@ -32,26 +37,30 @@ const Login = (): ReactElement => {
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            autoComplete="username"
-            autoFocus
-            {...register("username")}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            {...register("password")}
-          />
+          <Grid container spacing={3}>
+            <Grid item sm={12} xs={12}>
+              <StyledTextField
+                fullWidth
+                type="text"
+                placeholder="Usernames"
+                label="Username"
+                {...register("username")}
+                error={Boolean(errors.username)}
+                helperText={errors?.username?.message}
+              />
+            </Grid>
+            <Grid item sm={12} xs={12}>
+              <StyledTextField
+                fullWidth
+                type="password"
+                placeholder="Password"
+                label="Password"
+                {...register("password")}
+                error={Boolean(errors.password)}
+                helperText={errors?.password?.message}
+              />
+            </Grid>
+          </Grid>
           <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In

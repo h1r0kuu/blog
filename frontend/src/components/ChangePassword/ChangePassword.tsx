@@ -6,22 +6,19 @@ import { Tiny } from "../Text/Text"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import useTitle from "../../hooks/useTitle"
-
-type ChangePasswordFormProps = {
-  oldPassword: string
-  newPassword: string
-  confirmNewPassword: string
-}
+import { ChangePasswordFormProps } from "../../models/forms/ChangePasswordForm"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { changePasswordSchema } from "../../schemas/validationSchemas"
 
 const ChangePassword = (): ReactElement => {
   useTitle("Change Password")
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ChangePasswordFormProps>()
-
+  } = useForm<ChangePasswordFormProps>({
+    resolver: yupResolver(changePasswordSchema),
+  })
   const onSubmit: SubmitHandler<ChangePasswordFormProps> = (data: ChangePasswordFormProps) => {}
 
   return (
@@ -33,17 +30,21 @@ const ChangePassword = (): ReactElement => {
               <Grid item sm={12} xs={12}>
                 <StyledTextField
                   fullWidth
+                  type="password"
                   placeholder="Old Password"
                   {...register("oldPassword")}
                   error={Boolean(errors.oldPassword)}
+                  helperText={errors?.oldPassword?.message}
                 />
               </Grid>
               <Grid item sm={12} xs={12}>
                 <StyledTextField
                   fullWidth
+                  type="password"
                   placeholder="New Password"
                   {...register("newPassword")}
                   error={Boolean(errors.newPassword)}
+                  helperText={errors?.newPassword?.message}
                 />
                 <Tiny color="text.disabled">
                   <FontAwesomeIcon icon={faExclamationCircle} /> password must contain a minimum of 8 characters
@@ -52,9 +53,11 @@ const ChangePassword = (): ReactElement => {
               <Grid item sm={12} xs={12}>
                 <StyledTextField
                   fullWidth
+                  type="password"
                   placeholder="Confirm New Password"
                   {...register("confirmNewPassword")}
                   error={Boolean(errors.confirmNewPassword)}
+                  helperText={errors?.confirmNewPassword?.message}
                 />
               </Grid>
 
