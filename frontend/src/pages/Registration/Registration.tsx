@@ -4,6 +4,7 @@ import AuthService from "../../services/AuthService";
 import {RegistrationRequest} from "../../models/registration/RegistrationRequest";
 import {Link, useNavigate} from "react-router-dom";
 import {HOME, LOGIN} from "../../constants/pathConstants";
+import {Box, Button, Container, TextField, Typography} from "@mui/material";
 
 const Registration = (): ReactElement => {
   const nav = useNavigate();
@@ -30,62 +31,77 @@ const Registration = (): ReactElement => {
   }
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-          <div className="card border-0 shadow rounded-3 my-5">
-            <div className="card-body p-4 p-sm-5">
-              <h5 className="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
-              <form method="post" encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
-                <div className="form-floating mb-3">
-                  <input type="text" className={`form-control ${errors.username ? 'is-invalid' : ''}`} id="floatingInput" placeholder="Username" {...register("username")} />
-                  <label htmlFor="floatingInput">Username</label>
-                  <div className="invalid-feedback">
-                    {errors.username?.message}.
-                  </div>
-                </div>
-                <div className="form-floating mb-3">
-                  <input type="text" className={`form-control ${errors.email ? 'is-invalid' : ''}`} id="floatingEmail" placeholder="Email" {...register("email")} />
-                  <label htmlFor="floatingEmail">Email</label>
-                  <div className="invalid-feedback">
-                    {errors.email?.message}.
-                  </div>
-                </div>
-                <div className="form-floating mb-3">
-                  <input type="password" className={`form-control ${errors.password ? 'is-invalid' : ''}`} id="floatingPassword" placeholder="Password" {...register("password")} />
-                  <label htmlFor="floatingPassword">Password</label>
-                </div>
-                <div className="form-floating mb-3">
-                  <input type="file" className={`form-control ${errors.avatar ? 'is-invalid' : ''}`} id="floatingAvatar" {...register("avatar")} />
-                </div>
-
-                <div className="d-grid">
-                  <button className="btn btn-primary btn-login text-uppercase fw-bold" type="submit">
-                    Sign up
-                  </button>
-                </div>
-                <div className="my-1">
-                  <p>
-                    Already have an account? <Link to={LOGIN}>Login</Link>
-                  </p>
-                </div>
-                <hr className="my-4" />
-                <div className="d-grid mb-2">
-                  <button className="btn btn-google btn-login text-uppercase fw-bold" type="submit">
-                    <i className="fab fa-google me-2"></i> Sign up with Google
-                  </button>
-                </div>
-                <div className="d-grid">
-                  <button className="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
-                    <i className="fab fa-facebook-f me-2"></i> Sign up with Facebook
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Container component="main" maxWidth="xs">
+        <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+        >
+          <Typography component="h1" variant="h5">
+            Sign Up
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                autoComplete="email"
+                autoFocus
+                {...register("email")}
+            />
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                autoComplete="username"
+                autoFocus
+                {...register("username")}
+            />
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                {...register("password")}
+            />
+            <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+            >
+              Upload avatar
+              <input
+                  type="file"
+                  {...register("avatar")}
+                  hidden
+              />
+            </Button>
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Un
+            </Button>
+            <Typography align="center">
+              <Link to={LOGIN}>
+                {"Already have an account? Sign In"}
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
+      </Container>
   )
 }
 

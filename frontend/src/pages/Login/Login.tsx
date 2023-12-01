@@ -1,8 +1,18 @@
 import { ReactElement } from "react"
 import {SubmitHandler, useForm} from "react-hook-form";
-import AuthService from "../../services/AuthService";
 import {AuthRequest} from "../../models/auth/AuthRequest";
 import {useAuth} from "../../context/AuthContext";
+import {
+  Box,
+  Button,
+  Checkbox, Container,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography
+} from "@mui/material";
+import {Link} from "react-router-dom";
+import {REGISTRATION} from "../../constants/pathConstants";
 
 const Login = (): ReactElement => {
   const auth = useAuth()
@@ -17,61 +27,66 @@ const Login = (): ReactElement => {
   }
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-          <div className="card border-0 shadow rounded-3 my-5">
-            <div className="card-body p-4 p-sm-5">
-              <h5 className="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
-              <form method="post" onSubmit={handleSubmit(onSubmit)}>
-                <div className="form-floating mb-3">
-                  <input type="text" className="form-control" id="floatingInput" placeholder="Username" {...register("username")}/>
-                  <label htmlFor="floatingInput">Username</label>
-                </div>
-                <div className="form-floating mb-3">
-                  <input type="password" className="form-control" id="floatingPassword" placeholder="Password" {...register("password")}/>
-                  <label htmlFor="floatingPassword">Password</label>
-                </div>
-
-                <div className="form-check mb-3">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="rememberPasswordCheck"
-                    name="remember-me"
-                  />
-                  <label className="form-check-label" htmlFor="rememberPasswordCheck">
-                    Remember password
-                  </label>
-                </div>
-                <div className="d-grid">
-                  <button className="btn btn-primary btn-login text-uppercase fw-bold" type="submit">
-                    Sign in
-                  </button>
-                </div>
-                <div className="my-1">
-                  <p>
-                    Don't have an account? <a href="/registration">Register</a>
-                  </p>
-                </div>
-                <hr className="my-4" />
-                <div className="d-grid mb-2">
-                  <button className="btn btn-google btn-login text-uppercase fw-bold" type="submit">
-                    <i className="fab fa-google me-2"></i> Sign in with Google
-                  </button>
-                </div>
-                <div className="d-grid">
-                  <button className="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
-                    <i className="fab fa-facebook-f me-2"></i> Sign in with Facebook
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Container component="main" maxWidth="xs">
+        <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+        >
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                autoComplete="username"
+                autoFocus
+                {...register("username")}
+            />
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                {...register("password")}
+            />
+            <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+            />
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link to="#">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to={REGISTRATION}>
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
   )
 }
 
