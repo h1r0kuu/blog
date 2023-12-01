@@ -1,9 +1,9 @@
 import React, {
-    Context,
     createContext,
     Dispatch,
     FC,
     ReactElement,
+    ReactNode,
     SetStateAction,
     useContext,
     useEffect,
@@ -25,13 +25,17 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-const AuthProvider: FC<any> = ({children}): ReactElement => {
+type ProviderProps = {
+    children: ReactNode
+}
+
+const AuthProvider: FC<ProviderProps> = ({children}): ReactElement => {
     const [user, setUser] = useState<UserResponse>({} as UserResponse)
     const nav = useNavigate()
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user")
-        if(storedUser !== null) setUser(JSON.parse(storedUser))
+        if (storedUser !== null) setUser(JSON.parse(storedUser))
     }, [])
 
     const login = (data: AuthRequest) => {
