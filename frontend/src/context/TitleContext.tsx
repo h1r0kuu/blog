@@ -1,24 +1,20 @@
-import {createContext, FC, ReactElement, ReactNode, useState} from "react";
+import { createContext, Dispatch, FC, ReactElement, ReactNode, SetStateAction, useState } from "react"
 
 type TitleContextType = {
-    title: string,
-    setTitle: (title: string) => void
+  title: string
+  setTitle: Dispatch<SetStateAction<string>>
 }
 
 export const TitleContext = createContext<TitleContextType>({} as TitleContextType)
 
 type ProviderProps = {
-    children: ReactNode
+  children: ReactNode
 }
 
 const TitleContextProvider: FC<ProviderProps> = ({ children }): ReactElement => {
-    const [title, setTitle] = useState("");
-
-    return (
-        <TitleContext.Provider value={{ title, setTitle }}>
-            {children}
-        </TitleContext.Provider>
-    )
+  const [title, setTitle] = useState("")
+  document.title = title
+  return <TitleContext.Provider value={{ title, setTitle }}>{children}</TitleContext.Provider>
 }
 
 export default TitleContextProvider
