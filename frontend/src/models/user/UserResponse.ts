@@ -1,3 +1,3 @@
 export type UserResponse = {
-    username: string;
+  username: string
 }
