@@ -1,7 +1,6 @@
 import { InputBase, InputBaseProps, styled } from "@mui/material"
 import { FC } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSearch } from "@fortawesome/free-solid-svg-icons"
+import { SearchRounded } from "@mui/icons-material"
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   height: 45,
@@ -24,9 +23,8 @@ const SearchInput: FC<InputBaseProps> = (props) => {
     <StyledInputBase
       {...props}
       startAdornment={
-        <FontAwesomeIcon
-          icon={faSearch}
-          style={{
+        <SearchRounded
+          sx={{
             fontSize: 16,
             marginRight: 1,
             color: "text.disabled",

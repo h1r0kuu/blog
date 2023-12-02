@@ -1,14 +1,13 @@
 import { ReactElement } from "react"
-import { Box, Button, Card, Grid } from "@mui/material"
+import { Box, Button, Card, Grid, IconButton } from "@mui/material"
 import { StyledTextField } from "../StyledComponents/StyledComponents"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Tiny } from "../Text/Text"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import useTitle from "../../hooks/useTitle"
 import { ChangePasswordFormProps } from "../../models/forms/ChangePasswordForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { changePasswordSchema } from "../../schemas/validationSchemas"
+import { Error } from "@mui/icons-material"
 
 const ChangePassword = (): ReactElement => {
   useTitle("Change Password")
@@ -47,7 +46,9 @@ const ChangePassword = (): ReactElement => {
                   helperText={errors?.newPassword?.message}
                 />
                 <Tiny color="text.disabled">
-                  <FontAwesomeIcon icon={faExclamationCircle} /> password must contain a minimum of 8 characters
+                  <IconButton>
+                    <Error /> password must contain a minimum of 8 characters
+                  </IconButton>
                 </Tiny>
               </Grid>
               <Grid item sm={12} xs={12}>

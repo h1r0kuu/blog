@@ -1,8 +1,6 @@
-import { MoreVert } from "@mui/icons-material"
+import { ForumRounded, MoreVert, ThumbUp } from "@mui/icons-material"
 import { Avatar, Box, ButtonBase, Card, IconButton, styled, Typography, useTheme } from "@mui/material"
 import React, { FC } from "react"
-import { faComments, faThumbsUp } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 type PostCardProps = {
   post: {
@@ -62,7 +60,9 @@ const ProfilePostCard: FC<PostCardProps> = ({ post }) => {
         <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
           <ButtonBase disableRipple>
             <Box display="flex" alignItems="center">
-              <FontAwesomeIcon icon={faThumbsUp} />
+              <IconButton>
+                <ThumbUp />
+              </IconButton>
               <Typography color="text.disabled" ml={1}>
                 15
               </Typography>
@@ -70,7 +70,9 @@ const ProfilePostCard: FC<PostCardProps> = ({ post }) => {
           </ButtonBase>
           <ButtonBase disableRipple>
             <Box display="flex" alignItems="center">
-              <FontAwesomeIcon icon={faComments} />
+              <IconButton>
+                <ForumRounded />
+              </IconButton>
               <Typography color="text.disabled" ml={1}>
                 25
               </Typography>

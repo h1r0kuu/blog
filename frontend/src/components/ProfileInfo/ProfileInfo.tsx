@@ -1,9 +1,8 @@
 import { Box, Card, Divider, Grid, Typography } from "@mui/material"
 import { ReactElement } from "react"
 import { FollowWrapper, IconWrapper } from "../StyledComponents/StyledComponents"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons"
 import ProfilePostCard from "../ProfilePostCard/ProfilePostCard"
+import { GroupAdd, People } from "@mui/icons-material"
 
 const ProfileInfo = (): ReactElement => {
   return (
@@ -13,7 +12,7 @@ const ProfileInfo = (): ReactElement => {
           <FollowWrapper>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <IconWrapper>
-                <FontAwesomeIcon icon={faUserPlus} />
+                <GroupAdd />
               </IconWrapper>
               <Box marginLeft={1.5}>
                 <Typography color="text.disabled" lineHeight={1}>
@@ -26,7 +25,7 @@ const ProfileInfo = (): ReactElement => {
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <IconWrapper color="#FF9777">
-                <FontAwesomeIcon icon={faUsers} />
+                <People />
               </IconWrapper>
               <Box marginLeft={1.5}>
                 <Typography color="text.disabled" lineHeight={1}>
