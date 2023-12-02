@@ -2,6 +2,7 @@ package com.pwgp.blog.handler;
 
 import com.pwgp.blog.dto.error.ErrorResponse;
 import com.pwgp.blog.exception.EmailAlreadyTakenException;
+import com.pwgp.blog.exception.JwtAuthenticationException;
 import com.pwgp.blog.exception.UserAlreadyExistException;
 import com.pwgp.blog.exception.UsernameNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex) {
         ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleJwtAuthenticationException(JwtAuthenticationException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @Override

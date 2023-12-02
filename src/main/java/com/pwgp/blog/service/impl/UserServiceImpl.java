@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.pwgp.blog.constants.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -24,11 +26,11 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
 
         if(findByUsername(user.getUsername()) != null) {
-            throw new UserAlreadyExistException("User already exist");
+            throw new UserAlreadyExistException(USERNAME_HAS_ALREADY_BEEN_TAKEN);
         }
 
         if(userRepository.findByEmail(user.getEmail()) != null) {
-            throw new EmailAlreadyTakenException("Email is taken");
+            throw new EmailAlreadyTakenException(EMAIL_HAS_ALREADY_BEEN_TAKEN);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -41,6 +43,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 }

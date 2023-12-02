@@ -18,12 +18,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.pwgp.blog.constants.PathConstants.*;
+
+
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping(API_V1_AUTH)
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -33,7 +34,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN)
     public ResponseEntity<JwtResponse> login(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
@@ -47,7 +48,7 @@ public class AuthController {
                         .user(modelMapper.map(user, UserResponse.class)).build());
     }
 
-    @PostMapping("/registration")
+    @PostMapping(REGISTRATION)
     public String register(@Valid @ModelAttribute RegistrationRequest registrationRequest,
                            @RequestParam(value = "confirmToken", required = false) String token) {
         userMapper.create(registrationRequest);
@@ -57,7 +58,7 @@ public class AuthController {
         return "OK";
     }
 
-    @PostMapping("/refresh-token")
+    @PostMapping(REFRESH_VERIFICATION_TOKEN)
     public String refreshVerificationToken(@RequestParam(value = "confirmToken", required = false) String expiredToken) throws MessagingException {
         tokenService.refreshToken(expiredToken);
         return "OK";

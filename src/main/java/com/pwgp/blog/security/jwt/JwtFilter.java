@@ -1,5 +1,6 @@
 package com.pwgp.blog.security.jwt;
 
+import com.pwgp.blog.constants.AppConstants;
 import com.pwgp.blog.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -48,9 +49,9 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
+        String headerAuth = request.getHeader(AppConstants.AUTHORIZATION);
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(AppConstants.BEARER)) {
             return headerAuth.substring(7);
         }
 
