@@ -3,8 +3,6 @@ import { ChangePasswordFormProps } from "../models/forms/ChangePasswordForm"
 import { AuthRequest } from "../models/auth/AuthRequest"
 import { RegistrationRequest } from "../models/registration/RegistrationRequest"
 
-type ObjectShapeValues = yup.ObjectShape extends Record<string, infer V> ? V : never
-
 export const changePasswordSchema: yup.ObjectSchema<ChangePasswordFormProps> = yup.object().shape({
   oldPassword: yup.string().required("Old password is required"),
   newPassword: yup.string().required("New password is required").min(8),
@@ -41,10 +39,10 @@ export const registrationSchema: yup.ObjectSchema<RegistrationRequest> = yup.obj
     .test("type", "Only the following formats are accepted: .jpeg, .jpg, .png, .gif", (value) => {
       return (
         value &&
-        (value[0]?.type == "image/jpeg" ||
-          value[0]?.type == "image/jpg" ||
-          value[0]?.type == "image/png" ||
-          value[0]?.type == "image/gif")
+        (value[0]?.type === "image/jpeg" ||
+          value[0]?.type === "image/jpg" ||
+          value[0]?.type === "image/png" ||
+          value[0]?.type === "image/gif")
       )
     }),
 })

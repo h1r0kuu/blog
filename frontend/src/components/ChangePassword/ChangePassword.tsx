@@ -46,9 +46,7 @@ const ChangePassword = (): ReactElement => {
                   helperText={errors?.newPassword?.message}
                 />
                 <Tiny color="text.disabled">
-                  <IconButton>
-                    <Error /> password must contain a minimum of 8 characters
-                  </IconButton>
+                  <Error sx={{ fontSize: 16 }} /> password must contain a minimum of 8 characters
                 </Tiny>
               </Grid>
               <Grid item sm={12} xs={12}>

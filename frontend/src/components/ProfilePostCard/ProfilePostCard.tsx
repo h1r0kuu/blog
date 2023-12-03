@@ -1,5 +1,5 @@
 import { ForumRounded, MoreVert, ThumbUp } from "@mui/icons-material"
-import { Avatar, Box, ButtonBase, Card, IconButton, styled, Typography, useTheme } from "@mui/material"
+import { Avatar, Box, ButtonBase, Card, IconButton, styled, Typography } from "@mui/material"
 import React, { FC } from "react"
 
 type PostCardProps = {
@@ -10,7 +10,6 @@ type PostCardProps = {
   // handleMore: (event: MouseEvent<HTMLButtonElement>) => void
 }
 
-// styled components
 const ImageWrapper = styled(Box)(() => ({
   width: 48,
   height: 48,
@@ -26,7 +25,6 @@ const PostImageWrapper = styled(Box)(() => ({
 }))
 
 const ProfilePostCard: FC<PostCardProps> = ({ post }) => {
-  const theme = useTheme()
   return (
     <Card sx={{ padding: 2, mb: 3 }}>
       <Box display="flex" justifyContent="space-between">

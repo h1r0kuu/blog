@@ -1,5 +1,6 @@
 package com.pwgp.blog.configuration;
 
+import com.pwgp.blog.constants.AppConstants;
 import jakarta.servlet.MultipartConfigElement;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
@@ -18,8 +19,7 @@ public class ApplicationConfiguration {
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxFileSize(DataSize.ofMegabytes(5L));
-        factory.setMaxRequestSize(DataSize.ofMegabytes(5L));
+        factory.setMaxFileSize(DataSize.ofMegabytes(AppConstants.MAX_FILE_SIZE));
         return factory.createMultipartConfig();
     }
 }

@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
 
-        if(findByUsername(user.getUsername()) != null) {
+        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new UserAlreadyExistException(USERNAME_HAS_ALREADY_BEEN_TAKEN);
         }
 
-        if(userRepository.findByEmail(user.getEmail()) != null) {
+        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new EmailAlreadyTakenException(EMAIL_HAS_ALREADY_BEEN_TAKEN);
         }
 

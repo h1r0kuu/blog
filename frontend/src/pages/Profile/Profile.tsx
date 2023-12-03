@@ -1,7 +1,7 @@
 import { TabContext } from "@mui/lab"
 import { Avatar, Box, Grid, Typography } from "@mui/material"
 
-import { ReactElement, SyntheticEvent, useState } from "react"
+import { ReactElement, SyntheticEvent, useEffect, useState } from "react"
 import useTitle from "../../hooks/useTitle"
 import { useAuth } from "../../context/AuthContext"
 import Header from "../../components/Header/Header"
@@ -15,12 +15,24 @@ import {
 import SearchInput from "../../components/SearchInput/SearchInput"
 import ProfileInfo from "../../components/ProfileInfo/ProfileInfo"
 import ProfileFollowCard from "../../components/ProfileFollowCard/ProfileFollowCard"
+import { useParams } from "react-router-dom"
+import UserService from "../../services/UserService"
+import { UserResponse } from "../../models/user/UserResponse"
 
 const Profile = (): ReactElement => {
   useTitle("User Profile")
+  const [value, setValue] = useState("1")
+  const [profile, setProfile] = useState<UserResponse>({} as UserResponse)
+  const { username } = useParams()
   const { user } = useAuth()
 
-  const [value, setValue] = useState("1")
+  useEffect(() => {
+    if (username !== undefined) {
+      UserService.getUserByUsername(username).then((res) => {
+        setProfile(res.data)
+      })
+    }
+  }, [])
 
   const handleChange = (_: SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -53,7 +65,7 @@ const Profile = (): ReactElement => {
             >
               <ContentWrapper>
                 <Avatar
-                  src={"/static/avatar/001-man.svg"}
+                  src={profile.avatar}
                   sx={{
                     border: 4,
                     width: 100,
@@ -71,7 +83,7 @@ const Profile = (): ReactElement => {
                       lineHeight: "1.5",
                     }}
                   >
-                    {user?.username}
+                    {profile.username}
                   </Typography>
                 </Box>
               </ContentWrapper>

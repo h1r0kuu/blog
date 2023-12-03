@@ -72,9 +72,6 @@ const GeneralSettings = (): ReactElement => {
                   </Typography>
                   <Switch />
                 </SwitchWrapper>
-                <Tiny display="block" color="text.disabled" fontWeight={500}>
-                  Apply disable account
-                </Tiny>
                 <SwitchWrapper>
                   <Small display="block" fontWeight={600}>
                     Email Verified
