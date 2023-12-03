@@ -1,10 +1,13 @@
 package com.pwgp.blog.security.jwt;
 
+import com.pwgp.blog.constants.AppConstants;
 import com.pwgp.blog.entity.User;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -50,5 +53,15 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        String headerAuth = request.getHeader(AppConstants.AUTHORIZATION);
+
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(AppConstants.BEARER)) {
+            return headerAuth.substring(7);
+        }
+
+        return null;
     }
 }

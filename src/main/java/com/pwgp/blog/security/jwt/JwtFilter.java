@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String jwt = parseJwt(request);
+            String jwt = jwtUtils.extractTokenFromRequest(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
@@ -46,15 +46,5 @@ public class JwtFilter extends OncePerRequestFilter {
             logger.error("Cannot set user authentication: {}", e);
         }
         filterChain.doFilter(request, response);
-    }
-
-    private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader(AppConstants.AUTHORIZATION);
-
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(AppConstants.BEARER)) {
-            return headerAuth.substring(7);
-        }
-
-        return null;
     }
 }
