@@ -9,3 +9,6 @@ export const LOGOUT_API_URL = AUTH_URL + "/logout"
 
 export const USER_URL = API_URL + "/users"
 export const GET_USER_BY_USERNAME = (username: string) => `${USER_URL}/${username}`
+
+export const SETTINGS_URL = USER_URL + "/settings"
+export const CHANGE_PASSWORD = SETTINGS_URL + "/password"

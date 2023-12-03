@@ -4,6 +4,8 @@ import com.pwgp.blog.dto.auth.AuthRequest;
 import com.pwgp.blog.dto.auth.JwtResponse;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.User;
+import com.pwgp.blog.exception.UsernameNotFoundException;
+import com.pwgp.blog.repository.UserRepository;
 import com.pwgp.blog.security.jwt.JwtUtils;
 import com.pwgp.blog.service.AuthenticationService;
 import com.pwgp.blog.service.UserService;
@@ -19,6 +21,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import static com.pwgp.blog.constants.ErrorMessage.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -26,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final ModelMapper modelMapper;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public String getAuthenticatedUserUsername() {
@@ -38,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User getAuthenticatedUser() {
-        return userService.findByUsername(getAuthenticatedUserUsername());
+        return userRepository.findByUsername(getAuthenticatedUserUsername()).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 
     @Override

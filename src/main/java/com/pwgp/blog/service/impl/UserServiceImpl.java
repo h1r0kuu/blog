@@ -1,12 +1,17 @@
 package com.pwgp.blog.service.impl;
 
+import com.pwgp.blog.constants.ErrorMessage;
+import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.event.OnRegistrationCompleteEvent;
 import com.pwgp.blog.exception.EmailAlreadyTakenException;
+import com.pwgp.blog.exception.PasswordMismatchException;
 import com.pwgp.blog.exception.UserAlreadyExistException;
 import com.pwgp.blog.exception.UsernameNotFoundException;
 import com.pwgp.blog.repository.UserRepository;
+import com.pwgp.blog.service.AuthenticationService;
 import com.pwgp.blog.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
+    private final AuthenticationService authenticationService;
 
     @Override
     public User create(User user) {
@@ -44,5 +50,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional
+    public String updatePassword(ChangePasswordRequest changePasswordRequest) {
+        User user = authenticationService.getAuthenticatedUser();
+        String newPassword = changePasswordRequest.getNewPassword();
+        if(!newPassword.equals(changePasswordRequest.getConfirmPassword())) {
+            throw new PasswordMismatchException(PASSWORD_MISMATCH_MESSAGE);
+        }
+        if(!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            throw new PasswordMismatchException(PASSWORD_MISMATCH_MESSAGE);
+        }
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        userRepository.updatePassword(user.getUsername(), encodedNewPassword);
+        return "Updated";
     }
 }

@@ -6,7 +6,7 @@ import { RegistrationRequest } from "../models/registration/RegistrationRequest"
 export const changePasswordSchema: yup.ObjectSchema<ChangePasswordFormProps> = yup.object().shape({
   oldPassword: yup.string().required("Old password is required"),
   newPassword: yup.string().required("New password is required").min(8),
-  confirmNewPassword: yup
+  confirmPassword: yup
     .string()
     .oneOf([yup.ref("newPassword")], "Passwords do not match.")
     .required("Confirm new password is required"),

@@ -30,8 +30,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
-    @ExceptionHandler(ActivationCodeExpiredException.class)
-    public ResponseEntity<ErrorResponse> handleActivationCodeExpiredException(ActivationCodeExpiredException ex) {
+    @ExceptionHandler({ActivationCodeExpiredException.class, PasswordMismatchException.class})
+    public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
         ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
