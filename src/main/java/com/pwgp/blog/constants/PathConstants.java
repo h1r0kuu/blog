@@ -11,7 +11,8 @@ public final class PathConstants {
     public static final String API_V1_AUTH = API_V1 + "/auth";
     public static final String LOGIN ="/login";
     public static final String REGISTRATION ="/registration";
-    public static final String REFRESH_VERIFICATION_TOKEN ="/refresh-token";
+    public static final String REGISTRATION_VERIFICATION_TOKEN = REGISTRATION + "/token/{token}";
+    public static final String RESET_VERIFICATION_TOKEN = REGISTRATION + "/token/{token}/reset";
 
     public static final String API_V1_USERS = API_V1 + "/users";
     public static final String USERNAME = "/{username}";
