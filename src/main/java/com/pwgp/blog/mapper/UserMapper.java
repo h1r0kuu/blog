@@ -1,5 +1,6 @@
 package com.pwgp.blog.mapper;
 
+import com.pwgp.blog.constants.AppConstants;
 import com.pwgp.blog.dto.auth.RegistrationRequest;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.User;
@@ -22,6 +23,8 @@ public class UserMapper {
         if(registrationRequest.getAvatar() != null) {
             String imageUrl = imageService.upload(registrationRequest.getAvatar());
             user.setAvatar(imageUrl);
+        } else {
+            user.setAvatar(AppConstants.DEFAULT_PROFILE_AVATAR);
         }
         return modelMapper.map(userService.create(user), UserResponse.class);
     }
