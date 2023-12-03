@@ -8,6 +8,8 @@ import { ChangePasswordFormProps } from "../../models/forms/ChangePasswordForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { changePasswordSchema } from "../../schemas/validationSchemas"
 import { Error } from "@mui/icons-material"
+import UserService from "../../services/UserService"
+import { cachedDataVersionTag } from "v8"
 
 const ChangePassword = (): ReactElement => {
   useTitle("Change Password")
@@ -18,7 +20,11 @@ const ChangePassword = (): ReactElement => {
   } = useForm<ChangePasswordFormProps>({
     resolver: yupResolver(changePasswordSchema),
   })
-  const onSubmit: SubmitHandler<ChangePasswordFormProps> = (data: ChangePasswordFormProps) => {}
+  const onSubmit: SubmitHandler<ChangePasswordFormProps> = (data: ChangePasswordFormProps) => {
+    UserService.changeUserPassword(data).then((res) => {
+      console.log(res)
+    })
+  }
 
   return (
     <Box pt={2} pb={4}>
@@ -54,9 +60,9 @@ const ChangePassword = (): ReactElement => {
                   fullWidth
                   type="password"
                   placeholder="Confirm New Password"
-                  {...register("confirmNewPassword")}
-                  error={Boolean(errors.confirmNewPassword)}
-                  helperText={errors?.confirmNewPassword?.message}
+                  {...register("confirmPassword")}
+                  error={Boolean(errors.confirmPassword)}
+                  helperText={errors?.confirmPassword?.message}
                 />
               </Grid>
 

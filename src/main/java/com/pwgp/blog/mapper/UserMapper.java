@@ -2,6 +2,7 @@ package com.pwgp.blog.mapper;
 
 import com.pwgp.blog.constants.AppConstants;
 import com.pwgp.blog.dto.auth.RegistrationRequest;
+import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.service.ImageService;
@@ -31,5 +32,9 @@ public class UserMapper {
 
     public UserResponse findByUsername(String username) {
         return modelMapper.map(userService.findByUsername(username), UserResponse.class);
+    }
+
+    public String changePassword(ChangePasswordRequest changePasswordRequest) {
+        return userService.updatePassword(changePasswordRequest);
     }
 }
