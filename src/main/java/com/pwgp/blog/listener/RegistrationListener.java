@@ -26,7 +26,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String recipientAddress = user.getEmail();
 
         try {
-            emailService.sendVerificationToken(recipientAddress, verificationToken.getToken());
+            emailService.sendVerificationCode(recipientAddress, verificationToken.getToken());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

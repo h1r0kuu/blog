@@ -34,9 +34,6 @@ public class User implements UserDetails {
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "enabled")
-    private Boolean enabled = false;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private VerificationToken verificationToken;
 
@@ -45,6 +42,9 @@ public class User implements UserDetails {
 
     @ManyToMany(mappedBy = "views")
     private Set<Post> viewedPosts = new HashSet<Post>();
+
+    @Column(name = "is_email_verified")
+    private Boolean isEmailVerified = false;
 
     @CreationTimestamp
     @Column(name = "created_at")

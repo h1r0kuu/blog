@@ -1,7 +1,9 @@
 package com.pwgp.blog.service.impl;
 
+import com.pwgp.blog.constants.ErrorMessage;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.entity.VerificationToken;
+import com.pwgp.blog.exception.EmailAlreadyVerifiedException;
 import com.pwgp.blog.repository.UserRepository;
 import com.pwgp.blog.repository.VerificationTokenRepository;
 import com.pwgp.blog.service.EmailService;
@@ -30,17 +32,23 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             throw new RuntimeException("Token is expired");
         }
         User unverifiedUser = verificationToken.getUser();
-        unverifiedUser.setEnabled(true);
+        unverifiedUser.setIsEmailVerified(true);
         userRepository.save(unverifiedUser);
     }
 
     @Override
-    public void refreshToken(String token) throws MessagingException {
+    public void resetToken(String token) throws MessagingException {
         VerificationToken verificationToken = tokenRepository.findByToken(token);
+
+        if(verificationToken.getUser().getIsEmailVerified()) {
+            throw new EmailAlreadyVerifiedException(ErrorMessage.EMAIL_HAS_ALREADY_BEEN_VERIFIED);
+        }
+
         if(verificationToken.isExpired()) {
             verificationToken.newToken();
         }
+
         tokenRepository.save(verificationToken);
-        emailService.sendVerificationToken(verificationToken.getUser().getEmail(), verificationToken.getToken());
+        emailService.sendVerificationCode(verificationToken.getUser().getEmail(), verificationToken.getToken());
     }
 }

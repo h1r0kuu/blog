@@ -1,10 +1,7 @@
 package com.pwgp.blog.handler;
 
 import com.pwgp.blog.dto.error.ErrorResponse;
-import com.pwgp.blog.exception.EmailAlreadyTakenException;
-import com.pwgp.blog.exception.JwtAuthenticationException;
-import com.pwgp.blog.exception.UserAlreadyExistException;
-import com.pwgp.blog.exception.UsernameNotFoundException;
+import com.pwgp.blog.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -27,10 +24,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    @ExceptionHandler({UserAlreadyExistException.class, EmailAlreadyTakenException.class})
+    @ExceptionHandler({UserAlreadyExistException.class, EmailAlreadyTakenException.class, EmailAlreadyVerifiedException.class})
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex) {
         ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(ActivationCodeExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleActivationCodeExpiredException(ActivationCodeExpiredException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(JwtAuthenticationException.class)

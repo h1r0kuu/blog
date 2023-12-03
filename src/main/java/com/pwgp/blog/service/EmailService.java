@@ -1,8 +1,9 @@
 package com.pwgp.blog.service;
 
+import com.pwgp.blog.dto.email.EmailRequest;
 import jakarta.mail.MessagingException;
 
 public interface EmailService {
-    void sendEmail(String to, String subject, String body) throws MessagingException;
-    void sendVerificationToken(String to, String token) throws MessagingException;
+    void sendEmail(EmailRequest request) throws MessagingException;
+    void sendVerificationCode(String to, String token) throws MessagingException;
 }
