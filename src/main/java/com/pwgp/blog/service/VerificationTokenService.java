@@ -6,5 +6,5 @@ import jakarta.mail.MessagingException;
 public interface VerificationTokenService {
     VerificationToken create(VerificationToken token);
     void verify(String token);
-    void resetToken(String token) throws MessagingException;
+    void resendToken() throws MessagingException;
 }

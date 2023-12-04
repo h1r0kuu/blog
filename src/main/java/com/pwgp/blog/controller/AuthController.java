@@ -42,9 +42,9 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping(RESET_VERIFICATION_TOKEN)
-    public String resetActivationCode(@PathVariable("token") String token) throws MessagingException {
-        tokenService.resetToken(token);
+    @PostMapping(RESEND_VERIFICATION_TOKEN)
+    public String resendActivationCode() throws MessagingException {
+        tokenService.resendToken();
         return "OK";
     }
 }
