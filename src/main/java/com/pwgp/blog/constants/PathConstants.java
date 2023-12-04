@@ -12,11 +12,12 @@ public final class PathConstants {
     public static final String LOGIN ="/login";
     public static final String REGISTRATION ="/registration";
     public static final String REGISTRATION_VERIFICATION_TOKEN = REGISTRATION + "/token/{token}";
-    public static final String RESET_VERIFICATION_TOKEN = REGISTRATION + "/token/{token}/reset";
+    public static final String RESEND_VERIFICATION_TOKEN = REGISTRATION + "/token/resend";
 
     public static final String API_V1_USERS = API_V1 + "/users";
     public static final String USERNAME = "/{username}";
 
     public static final String SETTINGS = "/settings";
     public static final String CHANGE_PASSWORD = SETTINGS + "/password";
+    public static final String CHANGE_GENERAL = SETTINGS + "/general";
 }
