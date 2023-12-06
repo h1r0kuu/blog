@@ -1,6 +1,6 @@
 package com.pwgp.blog.service.impl;
 
-import com.pwgp.blog.constants.ErrorMessage;
+import com.pwgp.blog.dto.settings.ChangeGeneralSettingsRequest;
 import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.event.OnRegistrationCompleteEvent;
@@ -66,5 +66,18 @@ public class UserServiceImpl implements UserService {
         String encodedNewPassword = passwordEncoder.encode(newPassword);
         userRepository.updatePassword(user.getUsername(), encodedNewPassword);
         return "Updated";
+    }
+
+    @Override
+    public String changeGeneralSettings(ChangeGeneralSettingsRequest request) {
+        User user = authenticationService.getAuthenticatedUser();
+        if(userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new EmailAlreadyTakenException(EMAIL_HAS_ALREADY_BEEN_TAKEN);
+        }
+        if(userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("Exc");
+        }
+        userRepository.generalSettings(user.getId(), request.getUsername(), request.getEmail());
+        return null;
     }
 }
