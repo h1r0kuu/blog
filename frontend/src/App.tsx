@@ -8,6 +8,8 @@ import Profile from "./pages/Profile/Profile"
 import Settings from "./pages/Settings/Settings"
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material"
 import { commonTheme } from "./theme"
+import ProtectedRoute from "./utils/ProtectedRoute"
+import NotFound from "./pages/NotFound/NotFound"
 
 const App = () => {
   return (
@@ -17,9 +19,13 @@ const App = () => {
         <Route path={HOME} element={<Home />} />
         <Route path={LOGIN} element={<Login />} />
         <Route path={REGISTRATION} element={<Registration />} />
-
         <Route path={`${PROFILE}/:username`} element={<Profile />} />
-        <Route path={SETTINGS} element={<Settings />} />
+
+        {/*  AUTHORIZED USER ROUTES */}
+        <Route element={<ProtectedRoute />}>
+          <Route path={SETTINGS} element={<Settings />} />
+        </Route>
+        <Route path={"*"} element={<NotFound />} />
       </Routes>
     </ThemeProvider>
   )
