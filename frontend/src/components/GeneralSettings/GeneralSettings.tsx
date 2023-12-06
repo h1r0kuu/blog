@@ -1,32 +1,45 @@
 import { ReactElement } from "react"
 import { Box, Button, Card, Grid, IconButton, Switch, Typography } from "@mui/material"
-import { ButtonWrapper, StyledTextField, SwitchWrapper, UploadButton } from "../StyledComponents/StyledComponents"
-import { PhotoCamera } from "@mui/icons-material"
+import {
+  ButtonWrapper,
+  StyledButton,
+  StyledTextField,
+  SwitchWrapper,
+  UploadButton,
+} from "../StyledComponents/StyledComponents"
+import { Error, PhotoCamera } from "@mui/icons-material"
 import { Small, Tiny } from "../Text/Text"
 import { SubmitHandler, useForm } from "react-hook-form"
 import useTitle from "../../hooks/useTitle"
+import { useAuth } from "../../context/AuthContext"
+import AuthService from "../../services/AuthService"
+import { Link } from "react-router-dom"
 
 type SomeProps = {
   username: string
   about: string
+  email: string
+  isEmailVerified: boolean
 }
 
 const GeneralSettings = (): ReactElement => {
   useTitle("General Settings")
+  const { user } = useAuth()
 
-  const initialValues = {
-    username: "",
-    about: "",
-  }
+  // const initialValues: SomeProps = {
+  //   username: user.username,
+  //   email: user.email,
+  //   about: "",
+  //   isEmailVerified: user.isEmailVerified,
+  // }
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SomeProps>({
-    defaultValues: initialValues,
+    defaultValues: user,
   })
-
   const onSubmit: SubmitHandler<SomeProps> = (data: SomeProps) => {}
   return (
     <Box pt={2} pb={4}>
@@ -43,7 +56,13 @@ const GeneralSettings = (): ReactElement => {
                 alignItems: "center",
               }}
             >
-              <ButtonWrapper>
+              <ButtonWrapper
+                sx={{
+                  backgroundImage: `url(${user.avatar})`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                }}
+              >
                 <UploadButton>
                   <label htmlFor="upload-btn">
                     <input accept="image/*" id="upload-btn" type="file" style={{ display: "none" }} />
@@ -72,15 +91,6 @@ const GeneralSettings = (): ReactElement => {
                   </Typography>
                   <Switch />
                 </SwitchWrapper>
-                <SwitchWrapper>
-                  <Small display="block" fontWeight={600}>
-                    Email Verified
-                  </Small>
-                  <Switch defaultChecked />
-                </SwitchWrapper>
-                <Tiny display="block" color="text.disabled" fontWeight={500}>
-                  Disabling this will automatically send the user a verification email
-                </Tiny>
               </Box>
             </Card>
           </Grid>
@@ -95,6 +105,29 @@ const GeneralSettings = (): ReactElement => {
                       {...register("username")}
                       error={Boolean(errors.username)}
                     />
+                  </Grid>
+                  <Grid item sm={12} xs={12}>
+                    <StyledTextField
+                      fullWidth
+                      placeholder="Email"
+                      {...register("email")}
+                      error={Boolean(errors.email)}
+                    />
+                    {!user.isEmailVerified && (
+                      <Tiny color="warning.main">
+                        <Error sx={{ fontSize: 16 }} /> Your email isn't verified!
+                        <Typography
+                          color={"info.main"}
+                          sx={{ display: "inline-block", fontSize: 12 }}
+                          ml={1}
+                          component={Link}
+                          to={""}
+                          onClick={() => AuthService.resendActivationCode()}
+                        >
+                          Resend verification code
+                        </Typography>
+                      </Tiny>
+                    )}
                   </Grid>
 
                   <Grid item xs={12}>

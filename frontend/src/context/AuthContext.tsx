@@ -41,7 +41,9 @@ const AuthProvider: FC<ProviderProps> = ({ children }): ReactElement => {
   const login = (data: AuthRequest) => {
     AuthService.login(data).then((res) => {
       const user = JSON.stringify(res.data.user)
+      const token = res.data.jwt
       localStorage.setItem("user", user)
+      localStorage.setItem("token", token)
       setUser(JSON.parse(user))
       nav(HOME)
     })
@@ -49,6 +51,7 @@ const AuthProvider: FC<ProviderProps> = ({ children }): ReactElement => {
 
   const logout = () => {
     localStorage.removeItem("user")
+    localStorage.removeItem("token")
     setUser({} as UserResponse)
     AuthService.logout()
   }

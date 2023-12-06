@@ -15,7 +15,7 @@ import {
 } from "@mui/material"
 import AdbIcon from "@mui/icons-material/Adb"
 import MenuIcon from "@mui/icons-material/Menu"
-import { LOGIN, PROFILE, REGISTRATION, SETTINGS } from "../../constants/pathConstants"
+import { HOME, LOGIN, PROFILE, REGISTRATION, SETTINGS } from "../../constants/pathConstants"
 import { Link } from "react-router-dom"
 
 const Header = (): ReactElement => {
@@ -54,7 +54,7 @@ const Header = (): ReactElement => {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href={HOME}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -109,7 +109,7 @@ const Header = (): ReactElement => {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href={HOME}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
