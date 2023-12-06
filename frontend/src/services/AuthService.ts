@@ -1,5 +1,10 @@
 import { AxiosResponse } from "axios"
-import { LOGIN_API_URL, LOGOUT_API_URL, REGISTRATION_API_URL } from "../constants/apiConstants"
+import {
+  LOGIN_API_URL,
+  LOGOUT_API_URL,
+  REGISTRATION_API_URL,
+  RESEND_VERIFICATION_TOKEN,
+} from "../constants/apiConstants"
 import api from "../http"
 import { AuthResponse } from "../models/auth/AuthRespose"
 import { AuthRequest } from "../models/auth/AuthRequest"
@@ -20,5 +25,9 @@ export default class AuthService {
 
   static async logout(): Promise<void> {
     await api.post(LOGOUT_API_URL)
+  }
+
+  static async resendActivationCode(): Promise<void> {
+    await api.post(RESEND_VERIFICATION_TOKEN)
   }
 }
