@@ -1,8 +1,11 @@
 package com.pwgp.blog.security.jwt;
 
 import com.pwgp.blog.constants.AppConstants;
+import com.pwgp.blog.constants.ErrorMessage;
 import com.pwgp.blog.entity.User;
+import com.pwgp.blog.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
 
 @Component
@@ -18,21 +23,25 @@ public class JwtUtils {
     @Value("${jwt.expiration.ms}")
     private int jwtExpirationMs;
 
-    private final SecretKey key = Jwts.SIG.HS256.key().build();
+    @Value("${jwt.secret.key}")
+    private String key;
+
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateJwtToken(Authentication authentication) {
-
         User userPrincipal = (User) authentication.getPrincipal();
         return Jwts.builder()
                 .subject((userPrincipal.getUsername()))
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key)
+                .signWith(getKey())
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().verifyWith(key).build()
+        return Jwts.parser().verifyWith(getKey()).build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
@@ -40,19 +49,11 @@ public class JwtUtils {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().verifyWith(key).build().parse(authToken);
+            Jwts.parser().verifyWith(getKey()).build().parse(authToken);
             return true;
-        } catch (MalformedJwtException e) {
-            System.out.println("Invalid JWT token: " + e.getMessage());
-        } catch (ExpiredJwtException e) {
-            System.out.println("JWT token is expired: " + e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            System.out.println("JWT token is unsupported: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("JWT claims string is empty: " + e.getMessage());
+        } catch (MalformedJwtException | ExpiredJwtException | IllegalArgumentException e) {
+            throw new JwtAuthenticationException(ErrorMessage.JWT_TOKEN_EXPIRED);
         }
-
-        return false;
     }
 
     public String extractTokenFromRequest(HttpServletRequest request) {
