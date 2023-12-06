@@ -1,5 +1,6 @@
 package com.pwgp.blog.controller;
 
+import com.pwgp.blog.dto.settings.ChangeGeneralSettingsRequest;
 import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.mapper.UserMapper;
@@ -26,5 +27,10 @@ public class UserController {
     @PutMapping(CHANGE_PASSWORD)
     public ResponseEntity<?> changeUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.changePassword(changePasswordRequest));
+    }
+
+    @PutMapping(CHANGE_GENERAL)
+    public ResponseEntity<?> changeGeneralSettings(@RequestBody ChangeGeneralSettingsRequest changeGeneralSettingsRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(userMapper.changeGeneralSettings(changeGeneralSettingsRequest));
     }
 }

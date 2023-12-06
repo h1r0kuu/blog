@@ -23,19 +23,16 @@ const Registration = (): ReactElement => {
   })
 
   const onSubmit: SubmitHandler<RegistrationRequest> = (data: RegistrationRequest) => {
-    AuthService.register(data)
-      .then((res) => {
-        nav(HOME)
-      })
-      .catch((e) => {
-        const errors = e.response.data
-        Object.keys(errors).forEach((key: any) => {
-          setError(key, {
-            type: "server",
-            message: errors[key],
-          })
+    nav(HOME)
+    AuthService.register(data).catch((e) => {
+      const errors = e.response.data
+      Object.keys(errors).forEach((key: any) => {
+        setError(key, {
+          type: "server",
+          message: errors[key],
         })
       })
+    })
   }
 
   return (

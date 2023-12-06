@@ -21,10 +21,9 @@ import { UserResponse } from "../../models/user/UserResponse"
 
 const Profile = (): ReactElement => {
   useTitle("User Profile")
+  const { username } = useParams()
   const [value, setValue] = useState("1")
   const [profile, setProfile] = useState<UserResponse>({} as UserResponse)
-  const { username } = useParams()
-  const { user } = useAuth()
 
   useEffect(() => {
     if (username !== undefined) {
@@ -32,8 +31,9 @@ const Profile = (): ReactElement => {
         setProfile(res.data)
       })
     }
-  }, [])
+  }, [username])
 
+  console.log(profile.avatar)
   const handleChange = (_: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
