@@ -1,10 +1,15 @@
 import { Box, Card, Divider, Grid, Typography } from "@mui/material"
-import { ReactElement } from "react"
+import { FC, ReactElement } from "react"
 import { FollowWrapper, IconWrapper } from "../StyledComponents/StyledComponents"
 import ProfilePostCard from "../ProfilePostCard/ProfilePostCard"
 import { GroupAdd, People } from "@mui/icons-material"
 
-const ProfileInfo = (): ReactElement => {
+type ProfileInfoProps = {
+  followingCount: number
+  followersCount: number
+}
+
+const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount }): ReactElement => {
   return (
     <Grid container spacing={3}>
       <Grid item md={5} xs={12}>
@@ -19,7 +24,7 @@ const ProfileInfo = (): ReactElement => {
                   Following
                 </Typography>
                 <Typography lineHeight={1} mt={0.6}>
-                  93,675
+                  {followingCount}
                 </Typography>
               </Box>
             </Box>
@@ -32,7 +37,7 @@ const ProfileInfo = (): ReactElement => {
                   Followers
                 </Typography>
                 <Typography lineHeight={1} mt={0.6}>
-                  82,469
+                  {followersCount}
                 </Typography>
               </Box>
             </Box>

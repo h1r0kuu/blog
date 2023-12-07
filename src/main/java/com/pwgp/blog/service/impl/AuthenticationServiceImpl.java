@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User getAuthenticatedUser() {
-        return userRepository.findByUsername(getAuthenticatedUserUsername()).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        return userRepository.findByUsername(getAuthenticatedUserUsername(), User.class).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 
     @Override

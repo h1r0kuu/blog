@@ -1,5 +1,6 @@
 package com.pwgp.blog.service;
 
+import com.pwgp.blog.entity.User;
 import com.pwgp.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        return userRepository.findByUsername(username, User.class).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 }

@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
 
-        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if(userRepository.isUserExist(user.getUsername())) {
             throw new UserAlreadyExistException(USERNAME_HAS_ALREADY_BEEN_TAKEN);
         }
 
@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+    public <T> T findByUsername(String username, Class<T> type) {
+        return userRepository.findByUsername(username, type).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EmailAlreadyTakenException(EMAIL_HAS_ALREADY_BEEN_TAKEN);
         }
-        if(userRepository.findByUsername(request.getUsername()).isPresent()) {
+        if(userRepository.isUserExist(request.getUsername())) {
             throw new RuntimeException("Exc");
         }
         userRepository.generalSettings(user.getId(), request.getUsername(), request.getEmail());

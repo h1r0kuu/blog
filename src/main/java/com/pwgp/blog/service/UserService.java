@@ -6,7 +6,7 @@ import com.pwgp.blog.entity.User;
 
 public interface UserService {
     User create(User user);
-    User findByUsername(String username);
+    <T> T findByUsername(String username, Class<T> type);
     String updatePassword(ChangePasswordRequest changePasswordRequest);
     String changeGeneralSettings(ChangeGeneralSettingsRequest changeGeneralSettingsRequest);
 }

@@ -46,6 +46,12 @@ public class User implements UserDetails {
     @Column(name = "is_email_verified")
     private Boolean isEmailVerified = false;
 
+    @OneToMany(mappedBy = "follower")
+    private Set<Follow> followings = new HashSet<>();
+
+    @OneToMany(mappedBy = "following")
+    private Set<Follow> followers = new HashSet<>();
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

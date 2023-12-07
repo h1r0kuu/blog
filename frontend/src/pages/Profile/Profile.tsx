@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext"
 import Header from "../../components/Header/Header"
 import {
   ContentWrapper,
+  StyledButton,
   StyledCard,
   StyledTab,
   StyledTabList,
@@ -22,19 +23,64 @@ import { UserResponse } from "../../models/user/UserResponse"
 const Profile = (): ReactElement => {
   useTitle("User Profile")
   const { username } = useParams()
+  const { user } = useAuth()
   const [value, setValue] = useState("1")
   const [profile, setProfile] = useState<UserResponse>({} as UserResponse)
+  const [followers, setFollowers] = useState<UserResponse[]>([])
+  const [following, setFollowings] = useState<UserResponse[]>([])
+  const [followingsLoaded, setFollowingsLoader] = useState<boolean>(false)
+  const [isFollowed, setIsFollowed] = useState<boolean>(false)
 
   useEffect(() => {
     if (username !== undefined) {
       UserService.getUserByUsername(username).then((res) => {
-        setProfile(res.data)
+        const data = res.data
+        setProfile(data)
+        setIsFollowed(data.isMyProfileSubscribed)
       })
     }
   }, [username])
 
-  console.log(profile.avatar)
+  const loadUserFollowers = () => {
+    if (username !== undefined) {
+      UserService.getUserFollowers(username).then((res) => {
+        setFollowers(res.data.content)
+      })
+    }
+  }
+
+  const handleFollow = () => {
+    if (isFollowed) {
+      UserService.unfollowUser(profile.username).then((res) => {
+        setIsFollowed(false)
+      })
+    } else {
+      UserService.followUser(profile.username).then((res) => {
+        setIsFollowed(true)
+      })
+    }
+  }
+
+  const loadUserFollowings = () => {
+    if (username !== undefined) {
+      UserService.getUserFollowings(username).then((res) => {
+        setFollowings(res.data.content)
+        setFollowingsLoader(true)
+      })
+    }
+  }
+
   const handleChange = (_: SyntheticEvent, newValue: string) => {
+    switch (newValue) {
+      case "3": {
+        loadUserFollowers()
+        break
+      }
+      case "4": {
+        loadUserFollowings()
+        break
+      }
+    }
     setValue(newValue)
   }
 
@@ -74,7 +120,11 @@ const Profile = (): ReactElement => {
                   }}
                 />
 
-                <Box marginLeft={3} marginTop={3}>
+                <Box
+                  marginLeft={3}
+                  marginTop={3}
+                  sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+                >
                   <Typography
                     component="h3"
                     sx={{
@@ -82,24 +132,35 @@ const Profile = (): ReactElement => {
                       fontWeight: "600",
                       lineHeight: "1.5",
                     }}
+                    mb={1.5}
                   >
                     {profile.username}
                   </Typography>
+                  {user.username !== profile.username &&
+                    (isFollowed ? (
+                      <StyledButton variant="outlined" onClick={() => handleFollow()}>
+                        Unfollow
+                      </StyledButton>
+                    ) : (
+                      <StyledButton variant="contained" onClick={() => handleFollow()}>
+                        Follow
+                      </StyledButton>
+                    ))}
                 </Box>
               </ContentWrapper>
 
               <StyledTabList onChange={handleChange}>
                 <StyledTab label="Profile" value="1" />
                 <StyledTab label="Comments" value="2" />
-                <StyledTab label="Followers 15" value="3" />
-                <StyledTab label="Following 25" value="4" />
+                <StyledTab label={`Followers ${profile.followersSize}`} value="3" />
+                <StyledTab label={`Following ${profile.followingsSize}`} value="4" />
               </StyledTabList>
             </Box>
           </StyledCard>
 
           <Box marginTop={3}>
             <StyledTabPanel value="1">
-              <ProfileInfo />
+              <ProfileInfo followersCount={profile.followersSize} followingCount={profile.followingsSize} />
             </StyledTabPanel>
             <StyledTabPanel value="2">{/*<ProfileInfo />*/}</StyledTabPanel>
             <StyledTabPanel value="3">
@@ -117,15 +178,20 @@ const Profile = (): ReactElement => {
 
             <StyledTabPanel value="4">
               <Typography>Followings</Typography>
-              <SearchInput placeholder="Search Followings..." sx={{ my: 2 }} />
-
-              <Grid container spacing={3}>
-                {followers.map((item, index) => (
-                  <Grid item lg={4} sm={6} xs={12} key={index}>
-                    <ProfileFollowCard follower={item} />
+              {followingsLoaded === true ? (
+                <>
+                  <SearchInput placeholder="Search Followings..." sx={{ my: 2 }} />
+                  <Grid container spacing={3}>
+                    {following.map((item, index) => (
+                      <Grid item lg={4} sm={6} xs={12} key={index}>
+                        <ProfileFollowCard follower={item} />
+                      </Grid>
+                    ))}
                   </Grid>
-                ))}
-              </Grid>
+                </>
+              ) : (
+                <>Loading</>
+              )}
             </StyledTabPanel>
 
             <StyledTabPanel value="4">{/*<Gallery />*/}</StyledTabPanel>

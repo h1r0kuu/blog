@@ -1,0 +1,38 @@
+package com.pwgp.blog.mapper;
+
+import com.pwgp.blog.dto.user.UserProfileResponse;
+import com.pwgp.blog.dto.user.UserResponse;
+import com.pwgp.blog.entity.Follow;
+import com.pwgp.blog.repository.projection.UserProjection;
+import com.pwgp.blog.service.FollowService;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+public class FollowMapper {
+
+    private final FollowService followService;
+    private final ModelMapper modelMapper;
+
+    public Page<UserProfileResponse> getUserFollowers(String username, Pageable pageable) {
+        return followService.getUserFollowers(username, pageable).map(f -> modelMapper.map(f, UserProfileResponse.class));
+    }
+
+    public Page<UserProfileResponse> getUserFollowings(String username, Pageable pageable) {
+        return followService.getUserFollowings(username, pageable).map(f -> modelMapper.map(f, UserProfileResponse.class));
+    }
+
+    public void followUser(String username) {
+        followService.followUser(username);
+    }
+
+    public void unfollowUser(String username) {
+        followService.unfollowUser(username);
+    }
+}

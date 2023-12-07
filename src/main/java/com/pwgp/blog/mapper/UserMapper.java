@@ -4,8 +4,10 @@ import com.pwgp.blog.constants.AppConstants;
 import com.pwgp.blog.dto.auth.RegistrationRequest;
 import com.pwgp.blog.dto.settings.ChangeGeneralSettingsRequest;
 import com.pwgp.blog.dto.settings.ChangePasswordRequest;
+import com.pwgp.blog.dto.user.UserProfileResponse;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.User;
+import com.pwgp.blog.repository.projection.UserProjection;
 import com.pwgp.blog.service.ImageService;
 import com.pwgp.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +33,9 @@ public class UserMapper {
         return modelMapper.map(userService.create(user), UserResponse.class);
     }
 
-    public UserResponse findByUsername(String username) {
-        return modelMapper.map(userService.findByUsername(username), UserResponse.class);
+    public UserProfileResponse findByUsername(String username) {
+        UserProjection projection = userService.findByUsername(username, UserProjection.class);
+        return modelMapper.map(projection, UserProfileResponse.class);
     }
 
     public String changePassword(ChangePasswordRequest changePasswordRequest) {

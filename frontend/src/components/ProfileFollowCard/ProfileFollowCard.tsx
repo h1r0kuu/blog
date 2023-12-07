@@ -1,58 +1,73 @@
-import { Avatar, Box, Card, Typography, useTheme } from "@mui/material"
-import { FC } from "react"
+import { Avatar, Box, Button, Card, Typography, useTheme } from "@mui/material"
+import { FC, useState } from "react"
 import { StyledButton } from "../StyledComponents/StyledComponents"
+import { UserResponse } from "../../models/user/UserResponse"
+import UserService from "../../services/UserService"
+import { Link } from "react-router-dom"
+import { PROFILE } from "../../constants/pathConstants"
 
 type ProfileFollowCardProps = {
-  follower: {
-    image: string
-    name: string
-    following: boolean
-  }
+  follower: UserResponse
 }
 
 const ProfileFollowCard: FC<ProfileFollowCardProps> = ({ follower }) => {
   const theme = useTheme()
   const backgroundColor = theme.palette.mode === "light" ? "secondary.200" : "divider"
   const borderColor = theme.palette.mode === "light" ? "secondary.200" : "divider"
+  const [isMyProfileSubscribed, setIsMyProfileSubscribed] = useState<boolean>(follower.isMyProfileSubscribed)
+
+  const handleFollow = () => {
+    if (follower.isMyProfileSubscribed) {
+      UserService.unfollowUser(follower.username).then((res) => {
+        setIsMyProfileSubscribed(false)
+      })
+    } else {
+      UserService.followUser(follower.username).then((res) => {
+        setIsMyProfileSubscribed(true)
+      })
+    }
+  }
 
   return (
     <Card sx={{ padding: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Box sx={{ display: "flex" }}>
+        <Link to={`${PROFILE}/${follower.username}`} style={{ display: "flex", alignItems: "center" }}>
           <Avatar
-            src={"/static/avatar/001-man.svg"}
+            src={follower.avatar}
             sx={{
               border: 4,
-              width: 42,
-              height: 42,
+              width: 60,
+              height: 60,
               borderColor: "background.paper",
             }}
           />
 
           <Box marginLeft={1}>
-            <Typography>{follower.name}</Typography>
+            <Typography mb={1}>{follower.username}</Typography>
           </Box>
-        </Box>
+        </Link>
 
-        {follower.following ? (
-          <StyledButton
+        {isMyProfileSubscribed ? (
+          <Button
             sx={{
               backgroundColor,
               "&:hover": { backgroundColor },
             }}
+            onClick={() => handleFollow()}
           >
-            Following
-          </StyledButton>
+            Unfollow
+          </Button>
         ) : (
-          <StyledButton
+          <Button
             variant="outlined"
             sx={{
               borderColor,
               "&:hover": { borderColor },
             }}
+            onClick={() => handleFollow()}
           >
             Follow
-          </StyledButton>
+          </Button>
         )}
       </Box>
     </Card>

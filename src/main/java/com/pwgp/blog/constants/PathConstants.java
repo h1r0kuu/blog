@@ -16,6 +16,10 @@ public final class PathConstants {
 
     public static final String API_V1_USERS = API_V1 + "/users";
     public static final String USERNAME = "/{username}";
+    public static final String FOLLOW_USER = "/{username}/follow";
+    public static final String UNFOLLOW_USER = "/{username}/unfollow";
+    public static final String USER_FOLLOWERS = "/{username}/followers";
+    public static final String USER_FOLLOWINGS = "/{username}/followings";
 
     public static final String SETTINGS = "/settings";
     public static final String CHANGE_PASSWORD = SETTINGS + "/password";
