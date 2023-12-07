@@ -1,5 +1,5 @@
 import { TabContext } from "@mui/lab"
-import { Avatar, Box, Grid, Typography } from "@mui/material"
+import { Avatar, Box, CircularProgress, Grid, Typography } from "@mui/material"
 
 import { ReactElement, SyntheticEvent, useEffect, useState } from "react"
 import useTitle from "../../hooks/useTitle"
@@ -19,6 +19,7 @@ import ProfileFollowCard from "../../components/ProfileFollowCard/ProfileFollowC
 import { useParams } from "react-router-dom"
 import UserService from "../../services/UserService"
 import { UserResponse } from "../../models/user/UserResponse"
+import Loader from "../../components/Loader/Loader"
 
 const Profile = (): ReactElement => {
   useTitle("User Profile")
@@ -177,9 +178,9 @@ const Profile = (): ReactElement => {
             </StyledTabPanel>
 
             <StyledTabPanel value="4">
-              <Typography>Followings</Typography>
               {followingsLoaded === true ? (
                 <>
+                  <Typography>Followings</Typography>
                   <SearchInput placeholder="Search Followings..." sx={{ my: 2 }} />
                   <Grid container spacing={3}>
                     {following.map((item, index) => (
@@ -190,7 +191,7 @@ const Profile = (): ReactElement => {
                   </Grid>
                 </>
               ) : (
-                <>Loading</>
+                <Loader />
               )}
             </StyledTabPanel>
 
