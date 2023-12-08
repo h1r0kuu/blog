@@ -18,5 +18,5 @@ public final class ErrorMessage {
     public static final String USERNAME_LENGTH_MESSAGE = "Username must be between 3 and 20 characters";
     public static final String USERNAME_FORMAT_MESSAGE = "Username must contain only letters, numbers, underscores, or hyphens";
     public static final String EMAIL_NOT_VALID = "Please enter a valid email address.";
-
+    public static final String INVALID_IMAGE_FORMAT = "Invalid image format. Please upload an image with one of the following extensions: jpeg, jpg, gif, or png.";
 }

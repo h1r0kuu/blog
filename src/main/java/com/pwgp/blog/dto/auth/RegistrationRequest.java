@@ -1,5 +1,6 @@
 package com.pwgp.blog.dto.auth;
 
+import com.pwgp.blog.annotations.ImageValidation;
 import com.pwgp.blog.constants.ErrorMessage;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -16,5 +17,6 @@ public class RegistrationRequest {
     private String password;
     @Email(message = ErrorMessage.EMAIL_NOT_VALID)
     private String email;
+    @ImageValidation
     private MultipartFile avatar;
 }
