@@ -1,13 +1,13 @@
 import { Avatar, Box, Button, Card, Typography, useTheme } from "@mui/material"
 import { FC, useState } from "react"
 import { StyledButton } from "../StyledComponents/StyledComponents"
-import { UserResponse } from "../../models/user/UserResponse"
+import { FollowResponse, UserResponse } from "../../models/user/UserResponse"
 import UserService from "../../services/UserService"
 import { Link } from "react-router-dom"
 import { PROFILE } from "../../constants/pathConstants"
 
 type ProfileFollowCardProps = {
-  follower: UserResponse
+  follower: FollowResponse
 }
 
 const ProfileFollowCard: FC<ProfileFollowCardProps> = ({ follower }) => {

@@ -1,5 +1,6 @@
 package com.pwgp.blog.controller;
 
+import com.pwgp.blog.dto.follow.FollowResponse;
 import com.pwgp.blog.dto.settings.ChangeGeneralSettingsRequest;
 import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.dto.user.UserProfileResponse;
@@ -71,8 +72,8 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(USER_FOLLOWERS)
-    public ResponseEntity<Page<UserProfileResponse>> getUserFollowers(@PathVariable("username") String username,
-                                                               @PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<FollowResponse>> getUserFollowers(@PathVariable("username") String username,
+                                                                 @PageableDefault Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(followMapper.getUserFollowers(username, pageable));
     }
 
@@ -83,7 +84,7 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(USER_FOLLOWINGS)
-    public ResponseEntity<Page<UserProfileResponse>> getUserFollowings(@PathVariable("username") String username,
+    public ResponseEntity<Page<FollowResponse>> getUserFollowings(@PathVariable("username") String username,
                                                                        @PageableDefault Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(followMapper.getUserFollowings(username, pageable));
     }

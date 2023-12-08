@@ -1,5 +1,6 @@
 package com.pwgp.blog.mapper;
 
+import com.pwgp.blog.dto.follow.FollowResponse;
 import com.pwgp.blog.dto.user.UserProfileResponse;
 import com.pwgp.blog.dto.user.UserResponse;
 import com.pwgp.blog.entity.Follow;
@@ -20,12 +21,12 @@ public class FollowMapper {
     private final FollowService followService;
     private final ModelMapper modelMapper;
 
-    public Page<UserProfileResponse> getUserFollowers(String username, Pageable pageable) {
-        return followService.getUserFollowers(username, pageable).map(f -> modelMapper.map(f, UserProfileResponse.class));
+    public Page<FollowResponse> getUserFollowers(String username, Pageable pageable) {
+        return followService.getUserFollowers(username, pageable).map(f -> modelMapper.map(f, FollowResponse.class));
     }
 
-    public Page<UserProfileResponse> getUserFollowings(String username, Pageable pageable) {
-        return followService.getUserFollowings(username, pageable).map(f -> modelMapper.map(f, UserProfileResponse.class));
+    public Page<FollowResponse> getUserFollowings(String username, Pageable pageable) {
+        return followService.getUserFollowings(username, pageable).map(f -> modelMapper.map(f, FollowResponse.class));
     }
 
     public void followUser(String username) {

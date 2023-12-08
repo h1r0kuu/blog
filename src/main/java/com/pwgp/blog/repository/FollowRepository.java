@@ -1,6 +1,7 @@
 package com.pwgp.blog.repository;
 
 import com.pwgp.blog.entity.Follow;
+import com.pwgp.blog.repository.projection.FollowProjection;
 import com.pwgp.blog.repository.projection.UserProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +17,10 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     @Modifying
     Long deleteByFollower_UsernameAndFollowing_Username(String followerUsername, String followingUsername);
     @Query("SELECT u From User u LEFT JOIN u.followers follow WHERE follow.follower.username = :username")
-    Page<UserProjection> findFollowings(@Param("username") String username, Pageable pageable);
+    Page<FollowProjection> findFollowings(@Param("username") String username, Pageable pageable);
 
     @Query("SELECT u from User u LEFT JOIN u.followings follow WHERE follow.following.username = :username")
-    Page<UserProjection> findFollowers(@Param("username") String username, Pageable pageable);
+    Page<FollowProjection> findFollowers(@Param("username") String username, Pageable pageable);
 
     @Query("SELECT COUNT(f) from Follow f WHERE f.following.username = :username")
     int countUserFollowersByUserUsername(@Param("username") String username);

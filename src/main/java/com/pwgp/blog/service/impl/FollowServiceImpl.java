@@ -3,6 +3,7 @@ package com.pwgp.blog.service.impl;
 import com.pwgp.blog.entity.Follow;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.repository.FollowRepository;
+import com.pwgp.blog.repository.projection.FollowProjection;
 import com.pwgp.blog.repository.projection.UserProjection;
 import com.pwgp.blog.service.AuthenticationService;
 import com.pwgp.blog.service.FollowService;
@@ -34,12 +35,12 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public Page<UserProjection> getUserFollowings(String username, Pageable pageable) {
+    public Page<FollowProjection> getUserFollowings(String username, Pageable pageable) {
         return followRepository.findFollowings(username, pageable);
     }
 
     @Override
-    public Page<UserProjection> getUserFollowers(String username, Pageable pageable) {
+    public Page<FollowProjection> getUserFollowers(String username, Pageable pageable) {
         return followRepository.findFollowers(username, pageable);
     }
 

@@ -18,7 +18,7 @@ import ProfileInfo from "../../components/ProfileInfo/ProfileInfo"
 import ProfileFollowCard from "../../components/ProfileFollowCard/ProfileFollowCard"
 import { useParams } from "react-router-dom"
 import UserService from "../../services/UserService"
-import { UserResponse } from "../../models/user/UserResponse"
+import { FollowResponse, UserProfileResponse, UserResponse } from "../../models/user/UserResponse"
 import Loader from "../../components/Loader/Loader"
 
 const Profile = (): ReactElement => {
@@ -26,61 +26,75 @@ const Profile = (): ReactElement => {
   const { username } = useParams()
   const { user } = useAuth()
   const [value, setValue] = useState("1")
-  const [profile, setProfile] = useState<UserResponse>({} as UserResponse)
-  const [followers, setFollowers] = useState<UserResponse[]>([])
-  const [following, setFollowings] = useState<UserResponse[]>([])
+  const [profile, setProfile] = useState<UserProfileResponse>({} as UserProfileResponse)
+  const [isProfileLoading, setProfileLoading] = useState<boolean>(true)
+  const [followers, setFollowers] = useState<FollowResponse[]>([])
+  const [following, setFollowings] = useState<FollowResponse[]>([])
   const [followingsLoaded, setFollowingsLoader] = useState<boolean>(false)
   const [isFollowed, setIsFollowed] = useState<boolean>(false)
 
   useEffect(() => {
     if (username !== undefined) {
-      UserService.getUserByUsername(username).then((res) => {
-        const data = res.data
-        setProfile(data)
-        setIsFollowed(data.isMyProfileSubscribed)
-      })
+      loadUserProfile(username)
     }
   }, [username])
 
-  const loadUserFollowers = () => {
-    if (username !== undefined) {
-      UserService.getUserFollowers(username).then((res) => {
+  const loadUserProfile = async (username: string) => {
+    try {
+      const res = await UserService.getUserByUsername(username)
+      const data = res.data
+      setProfile(data)
+      setIsFollowed(data.isMyProfileSubscribed)
+      setProfileLoading(false)
+    } catch (error) {
+      console.error("Error loading user profile:", error)
+    }
+  }
+
+  const handleFollow = async () => {
+    try {
+      if (isFollowed) {
+        await UserService.unfollowUser(profile.username)
+      } else {
+        await UserService.followUser(profile.username)
+      }
+      setIsFollowed(!isFollowed)
+    } catch (error) {
+      console.error("Error toggling follow status:", error)
+    }
+  }
+
+  const loadUserFollowers = async () => {
+    try {
+      if (username !== undefined) {
+        const res = await UserService.getUserFollowers(username)
         setFollowers(res.data.content)
-      })
+      }
+    } catch (error) {
+      console.error("Error loading user followers:", error)
     }
   }
 
-  const handleFollow = () => {
-    if (isFollowed) {
-      UserService.unfollowUser(profile.username).then((res) => {
-        setIsFollowed(false)
-      })
-    } else {
-      UserService.followUser(profile.username).then((res) => {
-        setIsFollowed(true)
-      })
-    }
-  }
-
-  const loadUserFollowings = () => {
-    if (username !== undefined) {
-      UserService.getUserFollowings(username).then((res) => {
+  const loadUserFollowings = async () => {
+    try {
+      if (username !== undefined) {
+        const res = await UserService.getUserFollowings(username)
         setFollowings(res.data.content)
         setFollowingsLoader(true)
-      })
+      }
+    } catch (error) {
+      console.error("Error loading user followings:", error)
     }
   }
 
   const handleChange = (_: SyntheticEvent, newValue: string) => {
     switch (newValue) {
-      case "3": {
+      case "3":
         loadUserFollowers()
         break
-      }
-      case "4": {
+      case "4":
         loadUserFollowings()
         break
-      }
     }
     setValue(newValue)
   }
@@ -89,180 +103,120 @@ const Profile = (): ReactElement => {
     <>
       <Header />
       <Box pt={2} pb={4}>
-        <TabContext value={value}>
-          <StyledCard>
-            <Box sx={{ height: 200, width: "100%", overflow: "hidden" }}>
-              <img
-                src="/static/background/user-cover-pic.png"
-                alt="User Cover"
-                height="100%"
-                width="100%"
-                style={{ objectFit: "cover" }}
-              />
-            </Box>
+        {isProfileLoading ? (
+          <Loader />
+        ) : (
+          <TabContext value={value}>
+            <StyledCard>
+              <Box sx={{ height: 200, width: "100%", overflow: "hidden" }}>
+                <img src={profile.cover} alt="User Cover" height="100%" width="100%" style={{ objectFit: "cover" }} />
+              </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                padding: "0 2rem",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <ContentWrapper>
-                <Avatar
-                  src={profile.avatar}
-                  sx={{
-                    border: 4,
-                    width: 100,
-                    height: 100,
-                    borderColor: "background.paper",
-                  }}
-                />
-
-                <Box
-                  marginLeft={3}
-                  marginTop={3}
-                  sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-                >
-                  <Typography
-                    component="h3"
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  padding: "0 2rem",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <ContentWrapper>
+                  <Avatar
+                    src={profile.avatar}
                     sx={{
-                      fontSize: "18px",
-                      fontWeight: "600",
-                      lineHeight: "1.5",
+                      border: 4,
+                      width: 100,
+                      height: 100,
+                      borderColor: "background.paper",
                     }}
-                    mb={1.5}
+                  />
+
+                  <Box
+                    marginLeft={3}
+                    marginTop={3}
+                    sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
                   >
-                    {profile.username}
-                  </Typography>
-                  {user.username !== profile.username &&
-                    (isFollowed ? (
-                      <StyledButton variant="outlined" onClick={() => handleFollow()}>
-                        Unfollow
-                      </StyledButton>
-                    ) : (
-                      <StyledButton variant="contained" onClick={() => handleFollow()}>
-                        Follow
-                      </StyledButton>
-                    ))}
-                </Box>
-              </ContentWrapper>
+                    <Typography
+                      component="h3"
+                      sx={{
+                        fontSize: "18px",
+                        fontWeight: "600",
+                        lineHeight: "1.5",
+                      }}
+                      mb={1.5}
+                    >
+                      {profile.username}
+                    </Typography>
+                    {user.username !== profile.username &&
+                      (isFollowed ? (
+                        <StyledButton variant="outlined" onClick={() => handleFollow()}>
+                          Unfollow
+                        </StyledButton>
+                      ) : (
+                        <StyledButton variant="contained" onClick={() => handleFollow()}>
+                          Follow
+                        </StyledButton>
+                      ))}
+                  </Box>
+                </ContentWrapper>
 
-              <StyledTabList onChange={handleChange}>
-                <StyledTab label="Profile" value="1" />
-                <StyledTab label="Comments" value="2" />
-                <StyledTab label={`Followers ${profile.followersSize}`} value="3" />
-                <StyledTab label={`Following ${profile.followingsSize}`} value="4" />
-              </StyledTabList>
-            </Box>
-          </StyledCard>
+                <StyledTabList onChange={handleChange}>
+                  <StyledTab label="Profile" value="1" />
+                  <StyledTab label="Comments" value="2" />
+                  <StyledTab label={`Followers ${profile.followersSize}`} value="3" />
+                  <StyledTab label={`Following ${profile.followingsSize}`} value="4" />
+                </StyledTabList>
+              </Box>
+            </StyledCard>
 
-          <Box marginTop={3}>
-            <StyledTabPanel value="1">
-              <ProfileInfo followersCount={profile.followersSize} followingCount={profile.followingsSize} />
-            </StyledTabPanel>
-            <StyledTabPanel value="2">{/*<ProfileInfo />*/}</StyledTabPanel>
-            <StyledTabPanel value="3">
-              <Typography>Followers</Typography>
-              <SearchInput placeholder="Search Followers..." sx={{ my: 2 }} />
+            <Box marginTop={3}>
+              <StyledTabPanel value="1">
+                <ProfileInfo followersCount={profile.followersSize} followingCount={profile.followingsSize} />
+              </StyledTabPanel>
+              <StyledTabPanel value="2">{/*<ProfileInfo />*/}</StyledTabPanel>
+              <StyledTabPanel value="3">
+                <Box m={2}>
+                  <Typography>Followers</Typography>
+                  <SearchInput placeholder="Search Followers..." sx={{ my: 2 }} />
 
-              <Grid container spacing={3}>
-                {followers.map((item, index) => (
-                  <Grid item lg={4} sm={6} xs={12} key={index}>
-                    <ProfileFollowCard follower={item} />
-                  </Grid>
-                ))}
-              </Grid>
-            </StyledTabPanel>
-
-            <StyledTabPanel value="4">
-              {followingsLoaded === true ? (
-                <>
-                  <Typography>Followings</Typography>
-                  <SearchInput placeholder="Search Followings..." sx={{ my: 2 }} />
                   <Grid container spacing={3}>
-                    {following.map((item, index) => (
+                    {followers.map((item, index) => (
                       <Grid item lg={4} sm={6} xs={12} key={index}>
                         <ProfileFollowCard follower={item} />
                       </Grid>
                     ))}
                   </Grid>
-                </>
-              ) : (
-                <Loader />
-              )}
-            </StyledTabPanel>
+                </Box>
+              </StyledTabPanel>
 
-            <StyledTabPanel value="4">{/*<Gallery />*/}</StyledTabPanel>
-          </Box>
-        </TabContext>
+              <StyledTabPanel value="4">
+                <Box m={2}>
+                  {followingsLoaded === true ? (
+                    <>
+                      <Typography>Followings</Typography>
+                      <SearchInput placeholder="Search Followings..." sx={{ my: 2 }} />
+                      <Grid container spacing={3}>
+                        {following.map((item, index) => (
+                          <Grid item lg={4} sm={6} xs={12} key={index}>
+                            <ProfileFollowCard follower={item} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </>
+                  ) : (
+                    <Loader />
+                  )}
+                </Box>
+              </StyledTabPanel>
+
+              <StyledTabPanel value="4">{/*<Gallery />*/}</StyledTabPanel>
+            </Box>
+          </TabContext>
+        )}
       </Box>
     </>
   )
 }
 
-const followers = [
-  {
-    image: "",
-    name: "Mr. Breast",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Ethan Drake",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Selena Gomez",
-    following: false,
-  },
-  {
-    image: "",
-    name: "Sally Becker",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Dua Lipa",
-    following: false,
-  },
-  {
-    image: "",
-    name: "Joe Murry",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Mr. Breast",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Ethan Drake",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Selena Gomez",
-    following: false,
-  },
-  {
-    image: "",
-    name: "Sally Becker",
-    following: true,
-  },
-  {
-    image: "",
-    name: "Dua Lipa",
-    following: false,
-  },
-  {
-    image: "",
-    name: "Joe Murry",
-    following: true,
-  },
-]
 export default Profile
