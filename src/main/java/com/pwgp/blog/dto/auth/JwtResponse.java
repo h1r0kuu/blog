@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class JwtResponse {
-    private String jwt;
-    private UserResponse user;
+    private final String jwt;
+    private final UserResponse user;
 
     public JwtResponse(String jwt, UserResponse user) {
         this.jwt = jwt;

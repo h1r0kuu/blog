@@ -24,12 +24,7 @@ public class UserMapper {
 
     public UserResponse create(RegistrationRequest registrationRequest) {
         User user = modelMapper.map(registrationRequest, User.class);
-        if(registrationRequest.getAvatar() != null) {
-            String imageUrl = imageService.upload(registrationRequest.getAvatar());
-            user.setAvatar(imageUrl);
-        } else {
-            user.setAvatar(AppConstants.DEFAULT_PROFILE_AVATAR);
-        }
+        user.setAvatar(registrationRequest.getAvatar() != null ? imageService.upload(registrationRequest.getAvatar()) : AppConstants.DEFAULT_PROFILE_AVATAR);
         return modelMapper.map(userService.create(user), UserResponse.class);
     }
 
