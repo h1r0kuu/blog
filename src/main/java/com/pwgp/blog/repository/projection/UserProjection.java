@@ -7,6 +7,7 @@ public interface UserProjection {
     String getUsername();
     String getEmail();
     String getAvatar();
+    String getCover();
     boolean getIsEmailVerified();
 
     @Value("#{target.followers.size()}")

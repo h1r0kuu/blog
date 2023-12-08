@@ -1,5 +1,6 @@
 package com.pwgp.blog.entity;
 
+import com.pwgp.blog.constants.AppConstants;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,9 @@ public class User implements UserDetails {
 
     @Column(name = "avatar")
     private String avatar;
+
+    @Column(name = "cover")
+    private String cover = AppConstants.DEFAULT_COVER_IMAGE;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private VerificationToken verificationToken;

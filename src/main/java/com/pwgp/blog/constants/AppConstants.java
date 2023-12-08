@@ -14,4 +14,5 @@ public final class AppConstants {
     public static final String MAIL_VERIFICATION_TEMPLATE = "mail/verification-code-template.html";
 
     public static final String DEFAULT_PROFILE_AVATAR = "https://firebasestorage.googleapis.com/v0/b/blog-df8b6.appspot.com/o/default-avatar-icon-of-social-media-user-vector.jpg?alt=media";
+    public static final String DEFAULT_COVER_IMAGE = "https://firebasestorage.googleapis.com/v0/b/blog-df8b6.appspot.com/o/default-cover.png?alt=media";
 }
