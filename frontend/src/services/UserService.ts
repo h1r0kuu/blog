@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios"
 import { FollowResponse, UserProfileResponse, UserResponse } from "../models/user/UserResponse"
 import api from "../http"
 import {
+  CHANGE_GENERAL,
   CHANGE_PASSWORD,
   FOLLOW_USER,
   GET_USER_BY_USERNAME,
@@ -11,6 +12,7 @@ import {
 } from "../constants/apiConstants"
 import { ChangePasswordFormProps } from "../models/forms/ChangePasswordForm"
 import { PageableResponse } from "../models/pageable"
+import { ChangeGeneralSettingsForm } from "../models/forms/ChangeGeneralSettingsForm"
 
 export default class UserService {
   static async getUserByUsername(username: string): Promise<AxiosResponse<UserProfileResponse>> {
@@ -19,6 +21,14 @@ export default class UserService {
 
   static async changeUserPassword(data: ChangePasswordFormProps): Promise<AxiosResponse<string>> {
     return await api.put(CHANGE_PASSWORD, data)
+  }
+
+  static async changeGeneralSettings(data: ChangeGeneralSettingsForm): Promise<AxiosResponse<string>> {
+    return await api.put(CHANGE_GENERAL, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
   }
 
   static async getUserFollowers(username: string): Promise<AxiosResponse<PageableResponse<FollowResponse>>> {

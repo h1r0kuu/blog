@@ -13,15 +13,20 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT CASE WHEN count (u) > 0 THEN true ELSE false END FROM User u WHERE u.username = :username")
-    boolean isUserExist(@Param("username") String username);
+    boolean isUserExistByUsername(@Param("username") String username);
+    @Query("SELECT CASE WHEN count (u) > 0 THEN true ELSE false END FROM User u WHERE u.email = :email")
+    boolean isUserExistByEmail(@Param("email") String email);
     <T> Optional<T> findByUsername(String username, Class<T> type);
     Optional<User> findByEmail(String email);
     @Modifying
     @Query("UPDATE User u SET u.password = :newPassword WHERE u.username = :username")
     void updatePassword(@Param("username") String username, @Param("newPassword") String newPassword);
     @Modifying
-    @Query("UPDATE User u SET u.username = :username, u.email = :email WHERE u.id = :id")
-    void generalSettings(@Param("id") Long id,
-                         @Param("username") String username,
-                         @Param("email") String email);
+    @Query("UPDATE User u SET u.username = :username, u.email = :email, u.about = :about, u.avatar = :avatar, u.cover = :cover WHERE u.id = :id")
+    void updateGeneralSettings(@Param("id") Long id,
+                               @Param("username") String username,
+                               @Param("about") String about,
+                               @Param("email") String email,
+                               @Param("avatar") String avatar,
+                               @Param("cover") String cover);
 }
