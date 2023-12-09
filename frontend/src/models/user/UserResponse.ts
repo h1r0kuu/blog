@@ -2,6 +2,7 @@ export type UserResponse = {
   id: number
   username: string
   email: string
+  about: string
   avatar: string
   cover: string
   isEmailVerified: boolean
@@ -14,6 +15,7 @@ export type UserResponse = {
 
 export type UserProfileResponse = {
   username: string
+  about: string
   avatar: string
   cover: string
   followersSize: number

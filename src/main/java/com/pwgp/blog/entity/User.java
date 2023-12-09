@@ -32,28 +32,31 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "about")
+    private String about;
+
     @Column(name = "avatar")
     private String avatar;
 
     @Column(name = "cover")
     private String cover = AppConstants.DEFAULT_COVER_IMAGE;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private VerificationToken verificationToken;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<Post>();
 
-    @ManyToMany(mappedBy = "views")
+    @ManyToMany(mappedBy = "views", fetch = FetchType.LAZY)
     private Set<Post> viewedPosts = new HashSet<Post>();
 
     @Column(name = "is_email_verified")
     private Boolean isEmailVerified = false;
 
-    @OneToMany(mappedBy = "follower")
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follow> followings = new HashSet<>();
 
-    @OneToMany(mappedBy = "following")
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follow> followers = new HashSet<>();
 
     @CreationTimestamp

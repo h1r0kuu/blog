@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class UserProfileResponse {
     private String username;
+    private String about;
     private String avatar;
     private String cover;
     private int followersSize;
