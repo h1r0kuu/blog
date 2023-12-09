@@ -17,3 +17,4 @@ export const GET_USER_FOLLOWINGS = (username: string) => `${USER_URL}/${username
 
 export const SETTINGS_URL = USER_URL + "/settings"
 export const CHANGE_PASSWORD = SETTINGS_URL + "/password"
+export const CHANGE_GENERAL = SETTINGS_URL + "/general"
