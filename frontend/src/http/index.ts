@@ -11,4 +11,16 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+api.interceptors.response.use(
+  (config) => {
+    return config
+  },
+  async (error) => {
+    const request = error.config
+    if (error.response.status == 401) {
+      localStorage.clear()
+    }
+  },
+)
+
 export default api
