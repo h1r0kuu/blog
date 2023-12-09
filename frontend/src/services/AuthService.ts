@@ -12,11 +12,11 @@ import { RegistrationRequest } from "../models/registration/RegistrationRequest"
 
 export default class AuthService {
   static async login(data: AuthRequest): Promise<AxiosResponse<AuthResponse>> {
-    return api.post<AuthResponse>(LOGIN_API_URL, data)
+    return await api.post<AuthResponse>(LOGIN_API_URL, data)
   }
 
   static async register(data: RegistrationRequest): Promise<AxiosResponse<AuthResponse>> {
-    return api.post<AuthResponse>(REGISTRATION_API_URL, data, {
+    return await api.post<AuthResponse>(REGISTRATION_API_URL, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -24,7 +24,7 @@ export default class AuthService {
   }
 
   static async logout(): Promise<void> {
-    await api.post(LOGOUT_API_URL)
+    return await api.post(LOGOUT_API_URL)
   }
 
   static async resendActivationCode(): Promise<void> {

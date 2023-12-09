@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +62,7 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping(CHANGE_GENERAL)
-    public ResponseEntity<?> changeGeneralSettings(@RequestBody ChangeGeneralSettingsRequest changeGeneralSettingsRequest) {
+    public ResponseEntity<?> changeGeneralSettings(@Valid @ModelAttribute ChangeGeneralSettingsRequest changeGeneralSettingsRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.changeGeneralSettings(changeGeneralSettingsRequest));
     }
 

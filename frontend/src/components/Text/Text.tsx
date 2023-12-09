@@ -19,7 +19,9 @@ type Props = {
 export const Small: FC<BoxProps & Props> = ({ children, className, ellipsis, textTransform, ...props }) => {
   return (
     <StyledBox
-      textTransformStyle={textTransform}
+      style={{
+        textTransform: textTransform,
+      }}
       ellipsis={ellipsis}
       className={className}
       component="small"
@@ -36,7 +38,9 @@ export const Small: FC<BoxProps & Props> = ({ children, className, ellipsis, tex
 export const Tiny: FC<BoxProps & Props> = ({ children, className, ellipsis, textTransform, ...props }) => {
   return (
     <StyledBox
-      textTransformStyle={textTransform}
+      style={{
+        textTransform: textTransform,
+      }}
       ellipsis={ellipsis}
       className={className}
       component="small"

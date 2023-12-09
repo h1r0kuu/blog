@@ -1,5 +1,5 @@
 import { ForumRounded, MoreVert, ThumbUp } from "@mui/icons-material"
-import { Avatar, Box, ButtonBase, Card, IconButton, styled, Typography } from "@mui/material"
+import { Avatar, Box, Button, ButtonBase, Card, IconButton, styled, Typography } from "@mui/material"
 import React, { FC } from "react"
 
 type PostCardProps = {
@@ -56,26 +56,22 @@ const ProfilePostCard: FC<PostCardProps> = ({ post }) => {
         )}
 
         <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
-          <ButtonBase disableRipple>
-            <Box display="flex" alignItems="center">
-              <IconButton>
-                <ThumbUp />
-              </IconButton>
-              <Typography color="text.disabled" ml={1}>
-                15
-              </Typography>
-            </Box>
-          </ButtonBase>
-          <ButtonBase disableRipple>
-            <Box display="flex" alignItems="center">
-              <IconButton>
-                <ForumRounded />
-              </IconButton>
-              <Typography color="text.disabled" ml={1}>
-                25
-              </Typography>
-            </Box>
-          </ButtonBase>
+          <Box display="flex" alignItems="center">
+            <IconButton>
+              <ThumbUp />
+            </IconButton>
+            <Typography color="text.disabled" ml={1}>
+              15
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <IconButton>
+              <ForumRounded />
+            </IconButton>
+            <Typography color="text.disabled" ml={1}>
+              25
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Card>

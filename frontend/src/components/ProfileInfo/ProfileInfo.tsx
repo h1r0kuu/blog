@@ -7,9 +7,10 @@ import { GroupAdd, People } from "@mui/icons-material"
 type ProfileInfoProps = {
   followingCount: number
   followersCount: number
+  about: string
 }
 
-const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount }): ReactElement => {
+const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount, about }): ReactElement => {
   return (
     <Grid container spacing={3}>
       <Grid item md={5} xs={12}>
@@ -44,15 +45,16 @@ const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount }): 
           </FollowWrapper>
 
           <Divider />
-
-          <Box padding={3}>
-            <Typography component="h4" fontWeight={600}>
-              About
-            </Typography>
-            <Typography sx={{ display: "block", lineHeight: "1.9" }} mt={1}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...
-            </Typography>
-          </Box>
+          {about && (
+            <Box padding={3}>
+              <Typography component="h4" fontWeight={600}>
+                About
+              </Typography>
+              <Typography sx={{ display: "block", lineHeight: "1.9" }} mt={1}>
+                {about}
+              </Typography>
+            </Box>
+          )}
         </Card>
       </Grid>
 

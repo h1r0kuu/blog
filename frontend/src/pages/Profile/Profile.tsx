@@ -172,7 +172,11 @@ const Profile = (): ReactElement => {
 
             <Box marginTop={3}>
               <StyledTabPanel value="1">
-                <ProfileInfo followersCount={profile.followersSize} followingCount={profile.followingsSize} />
+                <ProfileInfo
+                  followersCount={profile.followersSize}
+                  followingCount={profile.followingsSize}
+                  about={profile.about}
+                />
               </StyledTabPanel>
               <StyledTabPanel value="2">{/*<ProfileInfo />*/}</StyledTabPanel>
               <StyledTabPanel value="3">
