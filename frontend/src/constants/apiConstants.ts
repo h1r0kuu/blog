@@ -15,6 +15,11 @@ export const UNFOLLOW_USER = (username: string) => `${USER_URL}/${username}/unfo
 export const GET_USER_FOLLOWERS = (username: string) => `${USER_URL}/${username}/followers`
 export const GET_USER_FOLLOWINGS = (username: string) => `${USER_URL}/${username}/followings`
 
+
+export const POST_URL = API_URL + "/posts"
+export const GET_ALL_POSTS_URL = POST_URL + "/"
+export const GET_POST_BY_ID = (id: number) => `${POST_URL}/${id}`
+
 export const SETTINGS_URL = USER_URL + "/settings"
 export const CHANGE_PASSWORD = SETTINGS_URL + "/password"
 export const CHANGE_GENERAL = SETTINGS_URL + "/general"

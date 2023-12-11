@@ -28,6 +28,10 @@ public class UserMapper {
         return modelMapper.map(userService.create(user), UserResponse.class);
     }
 
+    public UserResponse mapToUserResponse(User user) {
+        return modelMapper.map(user, UserResponse.class);
+    }
+
     public UserProfileResponse findByUsername(String username) {
         UserProjection projection = userService.findByUsername(username, UserProjection.class);
         return modelMapper.map(projection, UserProfileResponse.class);

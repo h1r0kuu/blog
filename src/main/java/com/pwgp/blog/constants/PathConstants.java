@@ -24,4 +24,8 @@ public final class PathConstants {
     public static final String SETTINGS = "/settings";
     public static final String CHANGE_PASSWORD = SETTINGS + "/password";
     public static final String CHANGE_GENERAL = SETTINGS + "/general";
+
+    public static final String API_V1_POSTS = API_V1 + "/posts";
+    public static final String POST_BY_ID = "/{post_id}";
+    public static final String ALL_POSTS = "/";
 }
