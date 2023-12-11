@@ -12,25 +12,32 @@ import UserService from "../../services/UserService"
 import { ChangeGeneralSettingsForm } from "../../models/forms/ChangeGeneralSettingsForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { changeGeneralSchema } from "../../schemas/validationSchemas"
-import { palette } from "@mui/system"
 
 const GeneralSettings = (): ReactElement => {
   useTitle("General Settings")
   const { user } = useAuth()
+
   const [avatarImage, setAvatarImage] = useState<string>(user.avatar)
   const [coverImage, setCoverImage] = useState<string>(user.cover)
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>, type: "avatar" | "cover") => {
-    if (e.target.files !== null) {
-      const file = e.target.files[0]
-      if (file) {
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          if (type === "avatar") setAvatarImage(reader.result as string)
-          else setCoverImage(reader.result as string)
-        }
-        reader.readAsDataURL(file)
+  const formDefaultValues = {
+    username: user.username,
+    email: user.email,
+    about: user.about,
+  }
+
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>, type: "avatar" | "cover") => {
+    const file = e.target.files?.[0]
+
+    if (file) {
+      const reader = new FileReader()
+
+      reader.onloadend = () => {
+        if (type === "avatar") setAvatarImage(reader.result as string)
+        else setCoverImage(reader.result as string)
       }
+
+      reader.readAsDataURL(file)
     }
   }
 
@@ -38,17 +45,22 @@ const GeneralSettings = (): ReactElement => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ChangeGeneralSettingsForm>({
-    defaultValues: {
-      username: user.username,
-      email: user.email,
-      about: user.about,
-    },
+    defaultValues: formDefaultValues,
     resolver: yupResolver(changeGeneralSchema),
   })
+
+  useEffect(() => {
+    setCoverImage(user.cover)
+    setAvatarImage(user.avatar)
+    reset(formDefaultValues)
+  }, [user.username, reset])
+
   const onSubmit: SubmitHandler<ChangeGeneralSettingsForm> = async (data: ChangeGeneralSettingsForm) => {
     await UserService.changeGeneralSettings(data)
   }
+
   return (
     <Box pt={2} pb={4}>
       <Card sx={{ padding: 4 }}>
