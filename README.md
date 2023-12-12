@@ -2,7 +2,7 @@
 
 ## Opis projektu
 
-Projekt zaliczeniowy z przedmiotu "Studia przypadku - programowanie w grupie programistycznej".
+Projekt zaliczeniowy z przedmiotu "Studium przypadku - programowanie w grupie programistycznej".
 Grupa składa się z trzech osób i postanowiła wykorzystać frameworki Spring Boot oraz React do stworzenia dynamicznego bloga.
 
 ## Instrukcje uruchomienia
