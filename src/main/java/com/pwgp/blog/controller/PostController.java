@@ -2,27 +2,24 @@ package com.pwgp.blog.controller;
 
 
 import com.pwgp.blog.dto.post.PostCreationRequest;
-import com.pwgp.blog.entity.Category;
-import com.pwgp.blog.entity.Post;
-import com.pwgp.blog.entity.Tag;
+import com.pwgp.blog.dto.post.PostDto;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.mapper.PostMapper;
 import com.pwgp.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Controller
+import static com.pwgp.blog.constants.PathConstants.*;
+
+@RestController
+@RequestMapping(API_V1_POSTS)
 @AllArgsConstructor
 public class PostController {
 
@@ -30,43 +27,24 @@ public class PostController {
     private final PostMapper postMapper;
 
 
-    @GetMapping("/")
-    public String listPosts(Model model, @AuthenticationPrincipal User user){
-        List<Post> posts = postService.FindAllPosts();
-        model.addAttribute("posts", posts);
-        model.addAttribute("user", user);
-        return "index";
+    @GetMapping(ALL_POSTS)
+    public ResponseEntity<?> getAllPosts(){
+        List<PostDto> posts = postService.FindAllPosts()
+                .stream()
+                .map(postMapper::mapToPostDto).collect(Collectors.toList());
+        return ResponseEntity.status(200).body(posts);
     }
 
-    @GetMapping("/post/create")
-    public  String createPost(Model model, @AuthenticationPrincipal User user){
-        if(user == null) return "redirect:/login";
-        List<Tag> tags = postService.FindAllTags();
-        List<Category> categories = postService.FindAllCategories();
-        model.addAttribute("tags", tags);
-        model.addAttribute("categories", categories);
-        model.addAttribute("post", new PostCreationRequest());
-        model.addAttribute("user",user);
-        return "post/post_create";
+    @GetMapping(POST_BY_ID)
+    public ResponseEntity<PostDto> getPost(@PathVariable("post_id") Long post_id) {
+        return ResponseEntity.status(HttpStatus.OK).body(postMapper.findById(post_id));
     }
 
-    @PostMapping("/post/create")
+    @PostMapping("/create")
     public String savePost(@ModelAttribute("post") @Valid PostCreationRequest postCreationRequest, @AuthenticationPrincipal User user){
         if(user == null) return "redirect:/login";
         postCreationRequest.setCreator(user);
         postMapper.create(postCreationRequest);
-        return "redirect:/";
+        return "OK";
     }
-
-
-    @GetMapping("/posts/{post_id}")
-    public String renderPost(@PathVariable("post_id") Long post_id, Model model, @AuthenticationPrincipal User user){
-        Post post = postService.FindPostById(post_id);
-        if(user != null) postService.registerUserView(user, post);
-        model.addAttribute("post", post);
-        model.addAttribute("user", user);
-        return "post/post";
-    }
-
-
 }

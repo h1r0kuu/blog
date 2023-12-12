@@ -21,6 +21,6 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private Set<Post> posts = new HashSet<Post>();
+    private Set<Post> posts = new HashSet<>();
 
 }
