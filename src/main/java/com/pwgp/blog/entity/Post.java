@@ -29,7 +29,10 @@ public class Post {
     @Column(name = "posterUrl")
     private String posterUrl;
 
-    @Column(name = "body", length = 10000)
+    @Column(name="Description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "body", columnDefinition = "TEXT")
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)

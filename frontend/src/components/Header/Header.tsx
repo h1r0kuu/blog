@@ -15,7 +15,7 @@ import {
 } from "@mui/material"
 import AdbIcon from "@mui/icons-material/Adb"
 import MenuIcon from "@mui/icons-material/Menu"
-import { HOME, LOGIN, PROFILE, REGISTRATION, SETTINGS } from "../../constants/pathConstants"
+import { HOME, LOGIN, PROFILE, REGISTRATION, SETTINGS, POST_CREATE } from "../../constants/pathConstants"
 import { Link } from "react-router-dom"
 
 const Header = (): ReactElement => {

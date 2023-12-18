@@ -19,6 +19,10 @@ export const GET_USER_FOLLOWINGS = (username: string) => `${USER_URL}/${username
 export const POST_URL = API_URL + "/posts"
 export const GET_ALL_POSTS_URL = POST_URL + "/"
 export const GET_POST_BY_ID = (id: number) => `${POST_URL}/${id}`
+export const POST_CREATION_URL = POST_URL + "/create"
+
+export const TAG_URL = API_URL + "/tags"
+export const GET_ALL_TAGS_URL = TAG_URL + "/"
 
 export const SETTINGS_URL = USER_URL + "/settings"
 export const CHANGE_PASSWORD = SETTINGS_URL + "/password"

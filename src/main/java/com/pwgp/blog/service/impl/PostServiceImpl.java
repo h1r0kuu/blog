@@ -1,7 +1,8 @@
 package com.pwgp.blog.service.impl;
 
+import com.pwgp.blog.dto.post.PostCreationRequest;
 import com.pwgp.blog.entity.*;
-import com.pwgp.blog.repository.CategoryRepository;
+import com.pwgp.blog.mapper.PostMapper;
 import com.pwgp.blog.repository.PostRepository;
 import com.pwgp.blog.repository.TagRepository;
 import com.pwgp.blog.service.PostService;
@@ -16,7 +17,7 @@ import java.util.Set;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final CategoryRepository categoryRepository;
+    private final PostMapper postMapper;
     private final TagRepository tagRepository;
 
     @Override
@@ -28,8 +29,9 @@ public class PostServiceImpl implements PostService {
     public Post findById(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
     }
-    @Override
-    public Post create(Post post) {
+
+    public Post createPost(PostCreationRequest postCreationRequest) {
+        Post post = postMapper.mapToPostEntity(postCreationRequest);
         return postRepository.save(post);
     }
 
@@ -39,13 +41,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Category> FindAllCategories() {
-        return categoryRepository.findAll();
+    public Post FindPostById(Long id) {
+        return postRepository.getReferenceById(id);
     }
 
     @Override
-    public Post FindPostById(Long id) {
-        return postRepository.getReferenceById(id);
+    public void create(PostCreationRequest postCreationRequest) {
+        return;
     }
 
     @Override
@@ -54,21 +56,6 @@ public class PostServiceImpl implements PostService {
             post.getViews().add(user);
             postRepository.save(post);
         }
-    }
-
-    @Override
-    public int calculateMarkValue(Set<Mark> marks){
-        return (int) (marks.size() - marks.stream().filter(mark -> !mark.isStatus()).count());
-    }
-
-    @Override
-    public int getPositiveMarksCount(Set<Mark> marks){
-        return (int) marks.stream().filter(Mark::isStatus).count();
-    }
-
-    @Override
-    public int getNegativeMarksCount(Set<Mark> marks){
-        return (int) marks.stream().filter(mark -> !mark.isStatus()).count();
     }
 
 }

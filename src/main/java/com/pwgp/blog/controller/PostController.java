@@ -1,16 +1,17 @@
 package com.pwgp.blog.controller;
 
 
+
 import com.pwgp.blog.dto.post.PostCreationRequest;
 import com.pwgp.blog.dto.post.PostDto;
-import com.pwgp.blog.entity.User;
+import com.pwgp.blog.entity.Post;
 import com.pwgp.blog.mapper.PostMapper;
 import com.pwgp.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class PostController {
 
 
     @GetMapping(ALL_POSTS)
-    public ResponseEntity<?> getAllPosts(){
+    public ResponseEntity<List<PostDto>> getAllPosts(){
         List<PostDto> posts = postService.FindAllPosts()
                 .stream()
                 .map(postMapper::mapToPostDto).collect(Collectors.toList());
@@ -37,14 +38,14 @@ public class PostController {
 
     @GetMapping(POST_BY_ID)
     public ResponseEntity<PostDto> getPost(@PathVariable("post_id") Long post_id) {
-        return ResponseEntity.status(HttpStatus.OK).body(postMapper.findById(post_id));
+        return ResponseEntity.status(HttpStatus.OK).body(postMapper.mapToPostDto(postService.findById(post_id)));
+    }
+    @PostMapping(value = POST_CREATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Post> savePost(@ModelAttribute PostCreationRequest postCreationRequest) {
+        Post savedPost = postService.createPost(postCreationRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(savedPost);
     }
 
-    @PostMapping("/create")
-    public String savePost(@ModelAttribute("post") @Valid PostCreationRequest postCreationRequest, @AuthenticationPrincipal User user){
-        if(user == null) return "redirect:/login";
-        postCreationRequest.setCreator(user);
-        postMapper.create(postCreationRequest);
-        return "OK";
-    }
+
+
 }

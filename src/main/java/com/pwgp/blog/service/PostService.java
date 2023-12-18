@@ -1,5 +1,6 @@
 package com.pwgp.blog.service;
 
+import com.pwgp.blog.dto.post.PostCreationRequest;
 import com.pwgp.blog.entity.*;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +13,14 @@ public interface PostService {
 
     List<Post> FindAllPosts();
     Post FindPostById(Long id);
+
+    void create(PostCreationRequest postCreationRequest);
+
     List<Tag> FindAllTags();
-    List<Category> FindAllCategories();
 
     Post findById(Long id);
 
-    Post create(Post post);
-
     void registerUserView(User user, Post post);
 
-    int calculateMarkValue(Set<Mark> marks);
-
-    int getPositiveMarksCount(Set<Mark> marks);
-
-    int getNegativeMarksCount(Set<Mark> marks);
+    Post createPost(PostCreationRequest postCreationRequest);
 }

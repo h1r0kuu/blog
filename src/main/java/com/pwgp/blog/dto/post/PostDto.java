@@ -17,9 +17,9 @@ public class PostDto {
 
     private String posterUrl;
 
-    private String body;
+    private String description;
 
-    private CategoryDto category;
+    private String body;
 
     private Set<TagDto> tags;
 

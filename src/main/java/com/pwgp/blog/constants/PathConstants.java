@@ -28,4 +28,9 @@ public final class PathConstants {
     public static final String API_V1_POSTS = API_V1 + "/posts";
     public static final String POST_BY_ID = "/{post_id}";
     public static final String ALL_POSTS = "/";
+    public static final String POST_CREATE = "/create";
+
+    public static final String API_V1_TAGS = API_V1 + "/tags";
+    public static final String ALL_TAGS = "/";
+
 }
