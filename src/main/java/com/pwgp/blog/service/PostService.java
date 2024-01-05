@@ -1,10 +1,10 @@
 package com.pwgp.blog.service;
 
+import com.pwgp.blog.dto.post.*;
 import com.pwgp.blog.entity.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public interface PostService {
@@ -12,18 +12,22 @@ public interface PostService {
 
     List<Post> FindAllPosts();
     Post FindPostById(Long id);
+
+    void create(PostCreationRequest postCreationRequest);
+
     List<Tag> FindAllTags();
-    List<Category> FindAllCategories();
 
     Post findById(Long id);
 
-    Post create(Post post);
+    Post createPost(PostCreationRequest postCreationRequest);
 
-    void registerUserView(User user, Post post);
+    void registerUserView(Post post);
 
-    int calculateMarkValue(Set<Mark> marks);
+    MarkUpdateResponse updateMark(MarkUpdateRequest markUpdateRequest);
 
-    int getPositiveMarksCount(Set<Mark> marks);
+    void deletePost(Long id);
 
-    int getNegativeMarksCount(Set<Mark> marks);
+    void updatePost(Long post_id, PostUpdateRequest postUpdateRequest);
+
+    List<PostDto> searchPosts(String searchQuery);
 }

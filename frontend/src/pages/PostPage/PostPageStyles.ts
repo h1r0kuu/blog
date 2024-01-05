@@ -84,6 +84,7 @@ export const PostBodyBox: SxProps<Theme> = {
         p: 2,
         mt: 2,
         mb: 2,
+        overflowWrap: 'break-word',
         fontSize: '1rem',
         lineHeight: '1.4',
         fontFamily: '-apple-system,BlinkMacSystemFont,Open Sans,Roboto,Helvetica Neue,Helvetica,sans-serif',
@@ -127,6 +128,7 @@ export const FirstIconsGroup: SxProps<Theme> = {
 
 export const SecondIconsGroup: SxProps<Theme> = {
     display: 'inline-flex',
+    alignItems: 'center',
     gap: '12px',
 };
 
@@ -135,4 +137,12 @@ export const TagsText: SxProps<Theme> = {
     fontSize: '1rem',
     lineHeight: '1.4',
     fontFamily: '-apple-system,BlinkMacSystemFont,Open Sans,Roboto,Helvetica Neue,Helvetica,sans-serif',
+};
+
+export const EditButtonStyle: SxProps<Theme> = {
+
+};
+
+export const DeleteButtonStyle: SxProps<Theme> = {
+
 };

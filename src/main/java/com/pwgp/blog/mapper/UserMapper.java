@@ -37,6 +37,10 @@ public class UserMapper {
         return modelMapper.map(projection, UserProfileResponse.class);
     }
 
+    public User findUserByUsername(String username) {
+        return userService.findByUsername(username, User.class);
+    }
+
     public String changePassword(ChangePasswordRequest changePasswordRequest) {
         return userService.updatePassword(changePasswordRequest);
     }

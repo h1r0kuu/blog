@@ -29,24 +29,23 @@ public class Post {
     @Column(name = "posterUrl")
     private String posterUrl;
 
-    @Column(name = "body", length = 10000)
+    @Column(name="Description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "body", columnDefinition = "TEXT")
     private String body;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private Set<Tag> tags = new HashSet<Tag>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User creator;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private Set<User> views = new HashSet<User>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private Set<Mark> marks = new HashSet<Mark>();
 
     @CreationTimestamp

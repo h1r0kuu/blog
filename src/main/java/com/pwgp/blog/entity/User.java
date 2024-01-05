@@ -44,11 +44,14 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private VerificationToken verificationToken;
 
-    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Post> posts = new HashSet<Post>();
 
-    @ManyToMany(mappedBy = "views", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "views", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Post> viewedPosts = new HashSet<Post>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Mark> Marks = new HashSet<Mark>();
 
     @Column(name = "is_email_verified")
     private Boolean isEmailVerified = false;
