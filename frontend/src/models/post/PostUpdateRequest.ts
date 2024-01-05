@@ -1,9 +1,8 @@
-export type PostCreationRequest = {
+export type PostUpdateRequest = {
     [key: string]: any;
     title: string
     body: string
     description: string
     tagIds: number[]
-    creatorUsername: string
-    poster?: FileList
+    poster?: FileList | null
 }

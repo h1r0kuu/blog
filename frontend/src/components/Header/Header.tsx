@@ -1,25 +1,28 @@
 import { ReactElement, useEffect, useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Tooltip,
-  Typography,
+    AppBar,
+    Avatar,
+    Box,
+    Button,
+    Container, Divider,
+    IconButton, InputBase,
+    Menu,
+    MenuItem,
+    Paper,
+    Toolbar,
+    Tooltip,
+    Typography,
 } from "@mui/material"
 import AdbIcon from "@mui/icons-material/Adb"
 import MenuIcon from "@mui/icons-material/Menu"
 import { HOME, LOGIN, PROFILE, REGISTRATION, SETTINGS, POST_CREATE } from "../../constants/pathConstants"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import SearchIcon from '@mui/icons-material/Search';
 
 const Header = (): ReactElement => {
   const { isAuthenticated, logout, user } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     window.addEventListener("resize", () => window.innerWidth >= 960)
@@ -35,15 +38,22 @@ const Header = (): ReactElement => {
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page: string) => {
     setAnchorElNav(null)
+      switch(page) {
+      case "Create Post":
+          navigate(POST_CREATE)
+          break;
+      default:
+          break;
+    }
   }
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
 
-  const pages = ["Posts"]
+  const pages = ["Create Post"]
 
   return (
     <AppBar position="static">
@@ -97,8 +107,8 @@ const Header = (): ReactElement => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {isAuthenticated() && pages.map((page) => (
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -124,12 +134,28 @@ const Header = (): ReactElement => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+            {isAuthenticated() && pages.map((page) => (
+              <Button key={page} onClick={() => handleCloseNavMenu(page)} sx={{ my: 2, color: "white", display: "block" }}>
                 {page}
               </Button>
             ))}
           </Box>
+        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Paper
+                component="form"
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+            >
+                <InputBase
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Search"
+                    inputProps={{ 'aria-label': 'search' }}
+                />
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                    <SearchIcon />
+                </IconButton>
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+            </Paper>
+        </Box>
 
           {isAuthenticated() ? (
             <Box sx={{ flexGrow: 0 }}>

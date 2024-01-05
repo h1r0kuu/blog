@@ -1,5 +1,6 @@
 package com.pwgp.blog.dto.post;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pwgp.blog.dto.user.UserResponse;
 import lombok.Data;
 
@@ -32,6 +33,10 @@ public class PostDto {
     private int positiveMarks;
 
     private int negativeMarks;
+
+    private Boolean markStatus;
+
+    private Boolean isMyProfileSubscribed;
 
     private LocalDateTime createdAt;
 

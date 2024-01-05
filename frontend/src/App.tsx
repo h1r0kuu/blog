@@ -8,6 +8,7 @@ import Profile from "./pages/Profile/Profile"
 import Settings from "./pages/Settings/Settings"
 import PostPage from "./pages/PostPage/PostPage"
 import PostCreationPage from "./pages/PostCreationPage/PostCreationPage"
+import PostUpdatePage from "./pages/PostUpdatePage/PostUpdatePage"
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material"
 import { commonTheme } from "./theme"
 import ProtectedRoute from "./utils/ProtectedRoute"
@@ -24,6 +25,7 @@ const App = () => {
         <Route path={POST_CREATE} element={<PostCreationPage />} />
         <Route path={`${PROFILE}/:username`} element={<Profile />} />
         <Route path={`${POST}/:id`} element={<PostPage />} />
+        <Route path={`${POST}/:id/update`} element={<PostUpdatePage />} />
 
         {/*  AUTHORIZED USER ROUTES */}
         <Route element={<ProtectedRoute />}>

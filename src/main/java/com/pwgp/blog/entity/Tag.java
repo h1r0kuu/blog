@@ -21,7 +21,7 @@ public class Tag {
     @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.REMOVE)
     private Set<Post> posts = new HashSet<Post>();
 
 }

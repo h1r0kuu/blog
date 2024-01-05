@@ -20,6 +20,9 @@ export const POST_URL = API_URL + "/posts"
 export const GET_ALL_POSTS_URL = POST_URL + "/"
 export const GET_POST_BY_ID = (id: number) => `${POST_URL}/${id}`
 export const POST_CREATION_URL = POST_URL + "/create"
+export const POST_DELETE_URL = (id: number) => `${POST_URL}/${id}/delete`
+export const POST_UPDATE_URL = (id: number) => `${POST_URL}/${id}/update`
+export const POST_MARK_UPDATE = POST_URL + "/mark/update"
 
 export const TAG_URL = API_URL + "/tags"
 export const GET_ALL_TAGS_URL = TAG_URL + "/"

@@ -5,6 +5,7 @@ export type PostDto = {
      id: number
      title: string
      posterUrl: string
+     description: string
      body: string
      tags: TagDto[]
      creator: FollowResponse
@@ -12,5 +13,7 @@ export type PostDto = {
      mark: number
      positiveMarks: number
      negativeMarks: number
+     markStatus: boolean | null
+     isMyProfileSubscribed: boolean | null
      createdAt: string
 }

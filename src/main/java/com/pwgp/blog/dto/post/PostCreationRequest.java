@@ -25,7 +25,7 @@ public class PostCreationRequest {
     @Size(min = 250, max = 550, message = "Post body should have at least 250 and less than 550 characters")
     private String description;
 
-    private List<TagDto> tags;
+    private List<Long> tagIds;
 
     @NotEmpty
     private String creatorUsername;
