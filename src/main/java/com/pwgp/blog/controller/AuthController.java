@@ -3,6 +3,7 @@ package com.pwgp.blog.controller;
 import com.pwgp.blog.dto.auth.AuthRequest;
 import com.pwgp.blog.dto.auth.JwtResponse;
 import com.pwgp.blog.dto.auth.RegistrationRequest;
+import com.pwgp.blog.dto.auth.RestorePasswordRequest;
 import com.pwgp.blog.mapper.UserMapper;
 import com.pwgp.blog.service.AuthenticationService;
 import com.pwgp.blog.service.VerificationTokenService;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -52,6 +54,28 @@ public class AuthController {
     @PostMapping(REGISTRATION)
     public ResponseEntity<?> register(@Valid @ModelAttribute RegistrationRequest registrationRequest) {
         userMapper.create(registrationRequest);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "Refresh user JWT token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful refreshed"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @PostMapping(REFRESH)
+    public ResponseEntity<JwtResponse> refresh() {
+        return ResponseEntity.status(HttpStatus.OK).body(authenticate.refresh());
+    }
+
+    @Operation(summary = "Restoring password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful restored"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @PostMapping(FORGET_PASSWORD)
+    public ResponseEntity<?> register(@Valid @RequestBody RestorePasswordRequest restorePasswordRequest) {
+        userMapper.restorePassword(restorePasswordRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

@@ -18,7 +18,6 @@ const Settings = (): ReactElement => {
         <TabContext value={value}>
           <StyledTabList onChange={handleChange}>
             <StyledTab label="General" value="1" />
-            <StyledTab label="Notifications" value="2" />
             <StyledTab label="Security" value="3" />
           </StyledTabList>
           <StyledTabPanel value="1">

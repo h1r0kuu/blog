@@ -2,6 +2,7 @@ package com.pwgp.blog.service.impl;
 
 import com.pwgp.blog.constants.AppConstants;
 import com.pwgp.blog.constants.ErrorMessage;
+import com.pwgp.blog.dto.auth.RestorePasswordRequest;
 import com.pwgp.blog.dto.settings.ChangeGeneralSettingsRequest;
 import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.entity.User;
@@ -87,5 +88,10 @@ public class UserServiceImpl implements UserService {
         String newCover = request.getCover() != null ? imageService.upload(request.getCover()) : user.getCover();
         userRepository.updateGeneralSettings(user.getId(), request.getUsername(), request.getEmail(), request.getAbout(), newAvatar, newCover);
         return "a";
+    }
+
+    @Override
+    public String restorePassword(RestorePasswordRequest restorePasswordRequest) {
+        return null;
     }
 }

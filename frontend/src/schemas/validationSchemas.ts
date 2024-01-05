@@ -6,6 +6,7 @@ import { ChangeGeneralSettingsForm } from "../models/forms/ChangeGeneralSettings
 import { IMAGE_TYPES, MAX_IMAGE_SIZE } from "../constants/appConstants"
 import {PostCreationRequest} from "../models/post/PostCreationRequest";
 import {PostUpdateRequest} from "../models/post/PostUpdateRequest";
+import { RestorePasswordRequest } from "../models/auth/RestorePasswordRequest"
 
 const validateImage = (required: boolean) => {
   return yup
@@ -70,19 +71,24 @@ export const registrationSchema: yup.ObjectSchema<RegistrationRequest> = yup.obj
   avatar: validateImage(true),
 })
 
+
 export const postCreationSchema: yup.ObjectSchema<PostCreationRequest> = yup.object().shape({
-  title: yup.string().required("Title is required").min(6, "Title should be at least 6 characters long"),
-  body: yup.string().required("Body is required").min(500, "Body should be at least 500 characters long"),
-  description: yup.string().required("Description is required").min(250, "Description should be at least 250 characters long").max(550, "Description should be at most 550 characters long"),
-  tagIds: yup.array().of(yup.number().required()).required("At least one tag is required").min(1, "At least one tag is required").max(5, "At most 5 tags are allowed"),
-  creatorUsername: yup.string().required("You should be logged in to create a post"),
-  poster: validateImage(true),
+    title: yup.string().required("Title is required").min(6, "Title should be at least 6 characters long"),
+    body: yup.string().required("Body is required").min(500, "Body should be at least 500 characters long"),
+    description: yup.string().required("Description is required").min(250, "Description should be at least 250 characters long").max(550, "Description should be at most 550 characters long"),
+    tagIds: yup.array().of(yup.number().required()).required("At least one tag is required").min(1, "At least one tag is required").max(5, "At most 5 tags are allowed"),
+    creatorUsername: yup.string().required("You should be logged in to create a post"),
+    poster: validateImage(true),
 });
 
 export const postUpdateSchema: yup.ObjectSchema<PostUpdateRequest> = yup.object().shape({
-  title: yup.string().required("Title is required").min(6, "Title should be at least 6 characters long"),
-  body: yup.string().required("Body is required").min(500, "Body should be at least 500 characters long"),
-  description: yup.string().required("Description is required").min(250, "Description should be at least 250 characters long").max(550, "Description should be at most 550 characters long"),
-  tagIds: yup.array().of(yup.number().required()).required("At least one tag is required").min(1, "At least one tag is required").max(5, "At most 5 tags are allowed"),
-  poster: validateImage(false).nullable(),
+    title: yup.string().required("Title is required").min(6, "Title should be at least 6 characters long"),
+    body: yup.string().required("Body is required").min(500, "Body should be at least 500 characters long"),
+    description: yup.string().required("Description is required").min(250, "Description should be at least 250 characters long").max(550, "Description should be at most 550 characters long"),
+    tagIds: yup.array().of(yup.number().required()).required("At least one tag is required").min(1, "At least one tag is required").max(5, "At most 5 tags are allowed"),
+    poster: validateImage(false).nullable(),
 });
+
+export const passwordRestoringSchema: yup.ObjectSchema<RestorePasswordRequest> = yup.object().shape({
+    email: yup.string().required("Email is required").email(),
+})

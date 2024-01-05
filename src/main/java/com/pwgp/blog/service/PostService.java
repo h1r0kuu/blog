@@ -30,4 +30,6 @@ public interface PostService {
     void updatePost(Long post_id, PostUpdateRequest postUpdateRequest);
 
     List<PostDto> searchPosts(String searchQuery);
+
+    List<PostDto> findByUserUsername(String username);
 }

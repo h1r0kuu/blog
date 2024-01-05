@@ -1,12 +1,12 @@
 import { ForumRounded, MoreVert, ThumbUp } from "@mui/icons-material"
 import { Avatar, Box, Button, ButtonBase, Card, IconButton, styled, Typography } from "@mui/material"
 import React, { FC } from "react"
+import { PostDto } from "../../models/post/PostDto"
+import { POST } from "../../constants/pathConstants"
+import { Link } from "react-router-dom"
 
 type PostCardProps = {
-  post: {
-    postTitle: string
-    postImage: string
-  }
+  post: PostDto
   // handleMore: (event: MouseEvent<HTMLButtonElement>) => void
 }
 
@@ -26,55 +26,30 @@ const PostImageWrapper = styled(Box)(() => ({
 
 const ProfilePostCard: FC<PostCardProps> = ({ post }) => {
   return (
-    <Card sx={{ padding: 2, mb: 3 }}>
-      <Box display="flex" justifyContent="space-between">
-        <Box display="flex" alignItems="center">
-          <ImageWrapper>
-            <Avatar src="" alt="h1r0ku" />
-          </ImageWrapper>
+    <Link to={`${POST}/${post.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+      <Card sx={{ padding: 2, mb: 3 }}>
+        <Box marginTop={3}>
+          <Typography fontWeight={600}>{post.title}</Typography>
 
-          <Box marginLeft={1}>
-            <Typography lineHeight={1}>Martha Hawk</Typography>
-            <Typography fontWeight={500} color="text.disabled">
-              22 June 2020
-            </Typography>
+          {post.posterUrl && (
+            <PostImageWrapper>
+              <img src={post.posterUrl} alt="Post One" width="100%" />
+            </PostImageWrapper>
+          )}
+
+          <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
+            <Box display="flex" alignItems="center">
+              <IconButton>
+                <ThumbUp />
+              </IconButton>
+              <Typography color="text.disabled" ml={1}>
+                {post.mark}
+              </Typography>
+            </Box>
           </Box>
         </Box>
-        {/*onClick = {"handleMore"}*/}
-        <IconButton>
-          <MoreVert fontSize="small" color="disabled" />
-        </IconButton>
-      </Box>
-
-      <Box marginTop={3}>
-        <Typography fontWeight={600}>{post.postTitle}</Typography>
-
-        {post.postImage && (
-          <PostImageWrapper>
-            <img src={post.postImage} alt="Post One" width="100%" />
-          </PostImageWrapper>
-        )}
-
-        <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
-          <Box display="flex" alignItems="center">
-            <IconButton>
-              <ThumbUp />
-            </IconButton>
-            <Typography color="text.disabled" ml={1}>
-              15
-            </Typography>
-          </Box>
-          <Box display="flex" alignItems="center">
-            <IconButton>
-              <ForumRounded />
-            </IconButton>
-            <Typography color="text.disabled" ml={1}>
-              25
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    </Card>
+      </Card>
+    </Link>
   )
 }
 

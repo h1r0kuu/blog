@@ -15,7 +15,7 @@ import { changeGeneralSchema } from "../../schemas/validationSchemas"
 
 const GeneralSettings = (): ReactElement => {
   useTitle("General Settings")
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
 
   const [avatarImage, setAvatarImage] = useState<string>(user.avatar)
   const [coverImage, setCoverImage] = useState<string>(user.cover)
@@ -57,8 +57,10 @@ const GeneralSettings = (): ReactElement => {
     reset(formDefaultValues)
   }, [user.username, reset])
 
-  const onSubmit: SubmitHandler<ChangeGeneralSettingsForm> = async (data: ChangeGeneralSettingsForm) => {
-    await UserService.changeGeneralSettings(data)
+  const onSubmit: SubmitHandler<ChangeGeneralSettingsForm> = (data: ChangeGeneralSettingsForm) => {
+    UserService.changeGeneralSettings(data).then((res) => {
+      refreshUser()
+    })
   }
 
   return (

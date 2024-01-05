@@ -1,16 +1,26 @@
 import { Box, Card, Divider, Grid, Typography } from "@mui/material"
-import { FC, ReactElement } from "react"
+import { FC, ReactElement, useEffect, useState } from "react"
 import { FollowWrapper, IconWrapper } from "../StyledComponents/StyledComponents"
 import ProfilePostCard from "../ProfilePostCard/ProfilePostCard"
 import { GroupAdd, People } from "@mui/icons-material"
+import { PostDto } from "../../models/post/PostDto"
+import PostService from "../../services/PostService"
 
 type ProfileInfoProps = {
   followingCount: number
   followersCount: number
   about: string
+  username: string
 }
 
-const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount, about }): ReactElement => {
+const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount, about, username }): ReactElement => {
+  const [posts, setPosts] = useState<PostDto[]>([])
+  useEffect(() => {
+    PostService.findByUserUsername(username).then((res) => {
+      setPosts(res.data)
+    })
+  }, [])
+
   return (
     <Grid container spacing={3}>
       <Grid item md={5} xs={12}>
@@ -59,10 +69,9 @@ const ProfileInfo: FC<ProfileInfoProps> = ({ followingCount, followersCount, abo
       </Grid>
 
       <Grid item md={7} xs={12}>
-        <ProfilePostCard post={{ postTitle: "das", postImage: "das" }} />
-        <ProfilePostCard post={{ postTitle: "das", postImage: "das" }} />
-        <ProfilePostCard post={{ postTitle: "das", postImage: "das" }} />
-        <ProfilePostCard post={{ postTitle: "das", postImage: "das" }} />
+        {posts.map((post) => (
+          <ProfilePostCard post={post} />
+        ))}
       </Grid>
     </Grid>
   )

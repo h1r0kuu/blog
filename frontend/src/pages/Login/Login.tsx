@@ -4,7 +4,7 @@ import { AuthRequest } from "../../models/auth/AuthRequest"
 import { useAuth } from "../../context/AuthContext"
 import { Box, Button, Checkbox, Container, FormControlLabel, Grid, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
-import { REGISTRATION } from "../../constants/pathConstants"
+import { FORGOT_PASSWORD, REGISTRATION } from "../../constants/pathConstants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { authSchema } from "../../schemas/validationSchemas"
 import { StyledTextField } from "../../components/StyledComponents/StyledComponents"
@@ -61,16 +61,15 @@ const Login = (): ReactElement => {
               />
             </Grid>
           </Grid>
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="#">Forgot password?</Link>
+              <Link to={FORGOT_PASSWORD}>Forgot your password?</Link>
             </Grid>
             <Grid item>
-              <Link to={REGISTRATION}>{"Don't have an account? Sign Up"}</Link>
+              <Link to={REGISTRATION}>Don't have an account?</Link>
             </Grid>
           </Grid>
         </Box>

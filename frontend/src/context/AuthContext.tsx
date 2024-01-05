@@ -19,6 +19,7 @@ type AuthContextType = {
   user: UserResponse
   setUser: Dispatch<SetStateAction<UserResponse>>
   login: (data: AuthRequest) => void
+  refreshUser: () => void
   logout: () => void
   isAuthenticated: () => boolean
 }
@@ -49,6 +50,16 @@ const AuthProvider: FC<ProviderProps> = ({ children }): ReactElement => {
     })
   }
 
+  const refreshUser = () => {
+    AuthService.refresh().then((res) => {
+      const user = JSON.stringify(res.data.user)
+      const token = res.data.jwt
+      localStorage.setItem("user", user)
+      localStorage.setItem("token", token)
+      setUser(JSON.parse(user))
+    })
+  }
+
   const logout = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("token")
@@ -68,6 +79,7 @@ const AuthProvider: FC<ProviderProps> = ({ children }): ReactElement => {
     user,
     setUser,
     login,
+    refreshUser,
     logout,
     isAuthenticated,
   }

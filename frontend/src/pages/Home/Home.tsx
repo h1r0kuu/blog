@@ -4,11 +4,11 @@ import Feed from "../../components/Feed/Feed"
 import { useAuth } from "../../context/AuthContext"
 
 const Home = (): ReactElement => {
-  const auth = useAuth()
+  const { user } = useAuth()
   return (
     <>
-        <Header />
-        <Feed />
+      <Header />
+      <Feed />
     </>
   )
 }

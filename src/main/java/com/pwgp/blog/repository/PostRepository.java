@@ -20,4 +20,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     boolean isUserViewed(@Param("user") User user, @Param("post_id") Long post_id);
 
     List<Post> findByTitleContainingIgnoreCase(String searchQuery);
+    List<Post> findByCreatorUsername(String username);
 }

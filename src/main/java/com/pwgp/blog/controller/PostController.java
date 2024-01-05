@@ -93,4 +93,9 @@ public class PostController {
         List<PostDto> posts = postService.searchPosts(query);
         return ResponseEntity.status(200).body(posts);
     }
+
+    @GetMapping(USER_POSTS)
+    public ResponseEntity<List<PostDto>> findPostsByUser(@PathVariable("username") String username){
+        return ResponseEntity.status(200).body(postService.findByUserUsername(username));
+    }
 }

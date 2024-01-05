@@ -10,9 +10,12 @@ public final class PathConstants {
 
     public static final String API_V1_AUTH = API_V1 + "/auth";
     public static final String LOGIN ="/login";
-    public static final String REGISTRATION ="/registration";
+    public static final String REGISTRATION = "/registration";
+    public static final String TOKEN = REGISTRATION + "/token";
+    public static final String REFRESH = "/refresh";
     public static final String REGISTRATION_VERIFICATION_TOKEN = REGISTRATION + "/token/{token}";
     public static final String RESEND_VERIFICATION_TOKEN = REGISTRATION + "/token/resend";
+    public static final String FORGET_PASSWORD = LOGIN + "/forget";
 
     public static final String API_V1_USERS = API_V1 + "/users";
     public static final String USERNAME = "/{username}";
@@ -33,8 +36,11 @@ public final class PathConstants {
     public static final String POST_UPDATE = POST_BY_ID + "/update";
     public static final String POST_MARK_UPDATE = "/mark/update";
     public static final String SEARCH_POSTS = "/search";
+    public static final String USER_POSTS = "/user/{username}";
 
     public static final String API_V1_TAGS = API_V1 + "/tags";
     public static final String ALL_TAGS = "/";
 
+    public static final String FRONTEND = "http://localhost:3000";
+    public static final String VERIFY_TOKEN = FRONTEND + "/verify/{token}";
 }

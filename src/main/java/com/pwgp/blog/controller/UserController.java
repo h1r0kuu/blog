@@ -4,6 +4,7 @@ import com.pwgp.blog.dto.follow.FollowResponse;
 import com.pwgp.blog.dto.settings.ChangeGeneralSettingsRequest;
 import com.pwgp.blog.dto.settings.ChangePasswordRequest;
 import com.pwgp.blog.dto.user.UserProfileResponse;
+import com.pwgp.blog.entity.User;
 import com.pwgp.blog.mapper.FollowMapper;
 import com.pwgp.blog.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;

@@ -32,17 +32,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
+    private HttpServletRequest getRequest() {
+        RequestAttributes attribs = RequestContextHolder.getRequestAttributes();
+        assert attribs != null;
+        return ((ServletRequestAttributes) attribs).getRequest();
+    }
+
+    private boolean isAuthed() {
+        HttpServletRequest request = getRequest();
+        String jwt = jwtUtils.extractTokenFromRequest(request);
+        return jwt != null;
+    }
+
     @Override
     public String getAuthenticatedUserUsername() {
-        RequestAttributes attribs = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) attribs).getRequest();
-        String jwt = jwtUtils.extractTokenFromRequest(request);
-        return jwtUtils.getUserNameFromJwtToken(jwt);
+        if(isAuthed()) {
+            HttpServletRequest request = getRequest();
+            String jwt = jwtUtils.extractTokenFromRequest(request);
+            return jwtUtils.getUserNameFromJwtToken(jwt);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public User getAuthenticatedUser() {
-        return userRepository.findByUsername(getAuthenticatedUserUsername(), User.class).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        if(isAuthed()) {
+            return userRepository.findByUsername(getAuthenticatedUserUsername(), User.class).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -53,5 +72,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwt = jwtUtils.generateJwtToken(authentication);
         User user = (User) authentication.getPrincipal();
         return new JwtResponse(jwt, modelMapper.map(user, UserResponse.class));
+    }
+
+    @Override
+    public JwtResponse refresh() {
+        User authUser = getAuthenticatedUser();
+        String newJwt = jwtUtils.generateJwtToken(authUser);
+        return new JwtResponse(newJwt, modelMapper.map(authUser, UserResponse.class));
     }
 }

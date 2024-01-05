@@ -127,4 +127,10 @@ public class PostServiceImpl implements PostService {
                 .map(postMapper::mapToPostDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<PostDto> findByUserUsername(String username) {
+        return postRepository.findByCreatorUsername(username).stream()
+                .map(postMapper::mapToPostDto).collect(Collectors.toList());
+    }
+
 }

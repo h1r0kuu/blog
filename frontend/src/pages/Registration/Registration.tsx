@@ -24,15 +24,19 @@ const Registration = (): ReactElement => {
 
   const onSubmit: SubmitHandler<RegistrationRequest> = (data: RegistrationRequest) => {
     nav(HOME)
-    AuthService.register(data).catch((e) => {
-      const errors = e.response.data
-      Object.keys(errors).forEach((key: any) => {
-        setError(key, {
-          type: "server",
-          message: errors[key],
+    AuthService.register(data)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        const errors = e.response.data
+        Object.keys(errors).forEach((key: any) => {
+          setError(key, {
+            type: "server",
+            message: errors[key],
+          })
         })
       })
-    })
   }
 
   return (
@@ -75,7 +79,7 @@ const Registration = (): ReactElement => {
             <Grid item sm={12} xs={12}>
               <StyledTextField
                 fullWidth
-                type="passowrd"
+                type="password"
                 placeholder="Password"
                 label="Password"
                 {...register("password")}
@@ -86,7 +90,7 @@ const Registration = (): ReactElement => {
             <Grid item sm={12} xs={12}>
               <StyledTextField
                 fullWidth
-                type="passowrd"
+                type="password"
                 placeholder="Confirm Password"
                 label="Confirm Password"
                 {...register("confirmPassword")}
@@ -122,7 +126,7 @@ const Registration = (): ReactElement => {
             Sign Up
           </Button>
           <Typography align="center">
-            <Link to={LOGIN}>{"Already have an account? Sign In"}</Link>
+            <Link to={LOGIN}>Already have an account?</Link>
           </Typography>
         </Box>
       </Box>

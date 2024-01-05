@@ -15,6 +15,7 @@ public class UserServiceHelper {
 
     public boolean isUserSubscribed(String username) {
         User authedUser = authenticationService.getAuthenticatedUser();
+        if(authedUser == null) return false;
         return followRepository.isUserSubscribed(authedUser.getUsername(), username);
     }
 }

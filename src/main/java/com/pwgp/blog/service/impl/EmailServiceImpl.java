@@ -44,12 +44,26 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendVerificationCode(String to, String token) throws MessagingException {
-        String confirmationUrl = PathConstants.API_V1_AUTH + PathConstants.REGISTRATION_VERIFICATION_TOKEN.replace("{token}", token);
-        String message = "http://localhost:8080" + confirmationUrl;
+        String message = PathConstants.VERIFY_TOKEN.replace("{token}", token);
         EmailRequest email = EmailRequest.builder()
                 .to(to)
                 .subject(AppConstants.MAIL_VERIFICATION_SUBJECT)
                 .template(AppConstants.MAIL_VERIFICATION_TEMPLATE)
+                .variables(Map.of(
+                        AppConstants.MAIL_VERIFICATION_VARIABLE, message
+                ))
+                .build();
+
+        sendEmail(email);
+    }
+
+    @Override
+    public void sendRestoreLink(String to) throws MessagingException {
+        String message = "";
+        EmailRequest email = EmailRequest.builder()
+                .to(to)
+                .subject(AppConstants.MAIL_RESTORE_PASSWORD_SUBJECT)
+                .template(AppConstants.MAIL_RESTORE_PASSWORD_TEMPLATE)
                 .variables(Map.of(
                         "verificationUrl", message
                 ))

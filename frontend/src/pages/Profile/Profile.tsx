@@ -1,7 +1,7 @@
 import { TabContext } from "@mui/lab"
-import { Avatar, Box, CircularProgress, Grid, Typography } from "@mui/material"
+import { Avatar, Box, Grid, Typography } from "@mui/material"
 
-import { ReactElement, SyntheticEvent, useEffect, useState } from "react"
+import { ChangeEvent, ReactElement, SyntheticEvent, useEffect, useState } from "react"
 import useTitle from "../../hooks/useTitle"
 import { useAuth } from "../../context/AuthContext"
 import Header from "../../components/Header/Header"
@@ -24,12 +24,16 @@ import Loader from "../../components/Loader/Loader"
 const Profile = (): ReactElement => {
   useTitle("User Profile")
   const { username } = useParams()
-  const { user } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const [value, setValue] = useState("1")
   const [profile, setProfile] = useState<UserProfileResponse>({} as UserProfileResponse)
   const [isProfileLoading, setProfileLoading] = useState<boolean>(true)
+
   const [followers, setFollowers] = useState<FollowResponse[]>([])
-  const [following, setFollowings] = useState<FollowResponse[]>([])
+  const [followings, setFollowings] = useState<FollowResponse[]>([])
+  const [filteredFollowers, setFilteredFollowers] = useState<FollowResponse[]>([])
+  const [filteredFollowings, setFilteredFollowings] = useState<FollowResponse[]>([])
+
   const [followingsLoaded, setFollowingsLoader] = useState<boolean>(false)
   const [isFollowed, setIsFollowed] = useState<boolean>(false)
 
@@ -69,6 +73,7 @@ const Profile = (): ReactElement => {
       if (username !== undefined) {
         const res = await UserService.getUserFollowers(username)
         setFollowers(res.data.content)
+        setFilteredFollowers(res.data.content)
       }
     } catch (error) {
       console.error("Error loading user followers:", error)
@@ -80,6 +85,7 @@ const Profile = (): ReactElement => {
       if (username !== undefined) {
         const res = await UserService.getUserFollowings(username)
         setFollowings(res.data.content)
+        setFilteredFollowings(res.data.content)
         setFollowingsLoader(true)
       }
     } catch (error) {
@@ -97,6 +103,26 @@ const Profile = (): ReactElement => {
         break
     }
     setValue(newValue)
+  }
+
+  const filterBySearch = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: "followers" | "followings",
+  ) => {
+    const query = event.target.value
+    if (type === "followers") {
+      let updatedList = [...followers]
+      updatedList = updatedList.filter((follower) => {
+        return follower.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      })
+      setFilteredFollowers(updatedList)
+    } else if (type === "followings") {
+      let updatedList = [...followings]
+      updatedList = updatedList.filter((following) => {
+        return following.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      })
+      setFilteredFollowings(updatedList)
+    }
   }
 
   return (
@@ -148,13 +174,18 @@ const Profile = (): ReactElement => {
                     >
                       {profile.username}
                     </Typography>
-                    {user.username !== profile.username &&
+                    {isAuthenticated() &&
+                      user.username !== profile.username &&
                       (isFollowed ? (
                         <StyledButton variant="outlined" onClick={() => handleFollow()}>
                           Unfollow
                         </StyledButton>
                       ) : (
-                        <StyledButton variant="contained" onClick={() => handleFollow()}>
+                        <StyledButton
+                          variant="contained"
+                          sx={{ color: (theme) => theme.palette.common.black }}
+                          onClick={() => handleFollow()}
+                        >
                           Follow
                         </StyledButton>
                       ))}
@@ -163,7 +194,6 @@ const Profile = (): ReactElement => {
 
                 <StyledTabList onChange={handleChange}>
                   <StyledTab label="Profile" value="1" />
-                  <StyledTab label="Comments" value="2" />
                   <StyledTab label={`Followers ${profile.followersSize}`} value="3" />
                   <StyledTab label={`Following ${profile.followingsSize}`} value="4" />
                 </StyledTabList>
@@ -176,16 +206,21 @@ const Profile = (): ReactElement => {
                   followersCount={profile.followersSize}
                   followingCount={profile.followingsSize}
                   about={profile.about}
+                  username={profile.username}
                 />
               </StyledTabPanel>
               <StyledTabPanel value="2">{/*<ProfileInfo />*/}</StyledTabPanel>
               <StyledTabPanel value="3">
                 <Box m={2}>
                   <Typography>Followers</Typography>
-                  <SearchInput placeholder="Search Followers..." sx={{ my: 2 }} />
+                  <SearchInput
+                    placeholder="Search Followers..."
+                    sx={{ my: 2 }}
+                    onChange={(e) => filterBySearch(e, "followers")}
+                  />
 
                   <Grid container spacing={3}>
-                    {followers.map((item, index) => (
+                    {filteredFollowers.map((item, index) => (
                       <Grid item lg={4} sm={6} xs={12} key={index}>
                         <ProfileFollowCard follower={item} />
                       </Grid>
@@ -196,12 +231,16 @@ const Profile = (): ReactElement => {
 
               <StyledTabPanel value="4">
                 <Box m={2}>
-                  {followingsLoaded === true ? (
+                  {followingsLoaded ? (
                     <>
                       <Typography>Followings</Typography>
-                      <SearchInput placeholder="Search Followings..." sx={{ my: 2 }} />
+                      <SearchInput
+                        placeholder="Search Followings..."
+                        sx={{ my: 2 }}
+                        onChange={(e) => filterBySearch(e, "followings")}
+                      />
                       <Grid container spacing={3}>
-                        {following.map((item, index) => (
+                        {filteredFollowings.map((item, index) => (
                           <Grid item lg={4} sm={6} xs={12} key={index}>
                             <ProfileFollowCard follower={item} />
                           </Grid>
@@ -213,8 +252,6 @@ const Profile = (): ReactElement => {
                   )}
                 </Box>
               </StyledTabPanel>
-
-              <StyledTabPanel value="4">{/*<Gallery />*/}</StyledTabPanel>
             </Box>
           </TabContext>
         )}
