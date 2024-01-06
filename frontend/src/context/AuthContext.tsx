@@ -40,14 +40,18 @@ const AuthProvider: FC<ProviderProps> = ({ children }): ReactElement => {
   }, [])
 
   const login = (data: AuthRequest) => {
-    AuthService.login(data).then((res) => {
-      const user = JSON.stringify(res.data.user)
-      const token = res.data.jwt
-      localStorage.setItem("user", user)
-      localStorage.setItem("token", token)
-      setUser(JSON.parse(user))
-      nav(HOME)
-    })
+    AuthService.login(data)
+      .then((res) => {
+        const user = JSON.stringify(res.data.user)
+        const token = res.data.jwt
+        localStorage.setItem("user", user)
+        localStorage.setItem("token", token)
+        setUser(JSON.parse(user))
+        nav(HOME)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   const refreshUser = () => {

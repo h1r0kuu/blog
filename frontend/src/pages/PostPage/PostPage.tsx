@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState, useCallback } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 import { Box, Typography, Card, CardContent, Avatar, IconButton, Button } from "@mui/material"
 import Header from "../../components/Header/Header"
 import * as Styles from "./PostPageStyles"
@@ -16,6 +16,7 @@ import UserService from "../../services/UserService"
 import { StyledButton } from "../../components/StyledComponents/StyledComponents"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined"
+import { PROFILE } from "../../constants/pathConstants"
 
 const PostPage = (): ReactElement => {
   const [post, setPost] = useState<PostDto>()
@@ -110,10 +111,12 @@ const PostPage = (): ReactElement => {
             {post?.tags?.map((tag, tagIndex) => `${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`)}
           </Typography>
           <Box sx={Styles.PostDescription}>
-            <Avatar src={post?.creator.avatar || ""} />
-            <Typography color="#448aff" variant="body1">
-              {post?.creator.username || ""}
-            </Typography>
+            <Link to={`${PROFILE}/${post?.creator.username}`} style={{ display: "flex", alignItems: "center" }}>
+              <Avatar src={post?.creator.avatar || ""} />
+              <Typography color="#448aff" variant="body1" ml={2}>
+                {post?.creator.username || ""}
+              </Typography>
+            </Link>
             {isAuthenticated() && user.username !== post?.creator.username && (
               <StyledButton variant={isFollowed ? "outlined" : "contained"} onClick={handleFollow}>
                 {isFollowed ? "Unfollow" : "Follow"}

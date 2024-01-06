@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
         String newAvatar = request.getAvatar() != null ? imageService.upload(request.getAvatar()) : user.getAvatar();
         String newCover = request.getCover() != null ? imageService.upload(request.getCover()) : user.getCover();
-        userRepository.updateGeneralSettings(user.getId(), request.getUsername(), request.getEmail(), request.getAbout(), newAvatar, newCover);
+        userRepository.updateGeneralSettings(user.getId(), request.getUsername(), request.getAbout(), request.getEmail(), newAvatar, newCover);
         return "a";
     }
 

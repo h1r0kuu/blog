@@ -40,6 +40,7 @@ const Profile = (): ReactElement => {
   useEffect(() => {
     if (username !== undefined) {
       loadUserProfile(username)
+      setValue("1")
     }
   }, [username])
 
