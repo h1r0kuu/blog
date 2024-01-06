@@ -11,7 +11,7 @@ import {
   POST_MARK_UPDATE,
   POST_DELETE_URL,
   POST_UPDATE_URL,
-  FIND_BY_USER_USERNAME,
+  FIND_BY_USER_USERNAME, FIND_BY_QUERY,
 } from "../constants/apiConstants"
 import { MarkUpdateRequest } from "../models/post/MarkUpdateRequest"
 import { MarkUpdateResponse } from "../models/post/MarkUpdateResponse"
@@ -60,5 +60,13 @@ export default class PostService {
 
   static async findByUserUsername(username: string): Promise<AxiosResponse<PostDto[]>> {
     return await api.get<PostDto[]>(FIND_BY_USER_USERNAME(username))
+  }
+
+  static async findByQuery(query: string): Promise<AxiosResponse<PostDto[]>> {
+    return await api.get<PostDto[]>(FIND_BY_QUERY, {
+      params: {
+        q: query
+      }
+    });
   }
 }
