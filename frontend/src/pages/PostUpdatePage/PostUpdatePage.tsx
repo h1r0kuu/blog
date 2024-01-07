@@ -8,7 +8,7 @@ import PostService from "../../services/PostService"
 import { TagDto } from "../../models/post/TagDto"
 import { PostUpdateRequest } from "../../models/post/PostUpdateRequest"
 import { Editor } from 'react-draft-wysiwyg';
-import Draft, { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
@@ -116,7 +116,7 @@ const PostUpdatePage = (): ReactElement => {
 
         try {
             await postUpdateSchema.validate(postRequest, {abortEarly: false});
-            let response = await PostService.update(Number(id) ,postRequest);
+            await PostService.update(Number(id) ,postRequest);
             navigate(`/posts/${id}`);
         } catch (e) {
             if (e instanceof ValidationError) {

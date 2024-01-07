@@ -1,11 +1,10 @@
-import { ReactElement, useEffect, useState, useCallback } from "react"
+import { ReactElement, useEffect, useState} from "react"
 import { formatDistanceToNow } from "date-fns"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { Box, Typography, Card, CardContent, Avatar, IconButton, Button } from "@mui/material"
 import Header from "../../components/Header/Header"
 import * as Styles from "./PostPageStyles"
 import VisibilityIcon from "@mui/icons-material/Visibility"
-import ChatBubbleRoundedIcon from "@mui/icons-material/ChatBubbleRounded"
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded"
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded"
 import SellIcon from "@mui/icons-material/Sell"
@@ -17,7 +16,6 @@ import { StyledButton } from "../../components/StyledComponents/StyledComponents
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined"
 import { PROFILE } from "../../constants/pathConstants"
-import {ThirdIconsGroup} from "./PostPageStyles";
 
 const PostPage = (): ReactElement => {
   const [post, setPost] = useState<PostDto>()
@@ -26,7 +24,6 @@ const PostPage = (): ReactElement => {
   const [markStatus, setMarkStatus] = useState<boolean | null>(null)
   const [positiveMarks, setPositiveMarks] = useState<number>(0)
   const [negativeMarks, setNegativeMarks] = useState<number>(0)
-  const [views, setViews] = useState<number>(0)
   const { isAuthenticated, user } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
   const [isFollowed, setIsFollowed] = useState<boolean | null>(false)
