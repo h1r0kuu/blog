@@ -1,4 +1,4 @@
-import { ForumRounded, MoreVert, ThumbUp } from "@mui/icons-material"
+import { ForumRounded, MoreVert, ThumbsUpDown as MarksIcon, ThumbUp } from "@mui/icons-material"
 import { Avatar, Box, Button, ButtonBase, Card, IconButton, styled, Typography } from "@mui/material"
 import React, { FC } from "react"
 import { PostDto } from "../../models/post/PostDto"
@@ -40,11 +40,9 @@ const ProfilePostCard: FC<PostCardProps> = ({ post }) => {
           <Box display="flex" alignItems="center" justifyContent="space-between" my={2}>
             <Box display="flex" alignItems="center">
               <IconButton>
-                <ThumbUp />
+                <MarksIcon />
               </IconButton>
-              <Typography color="text.disabled" ml={1}>
-                {post.mark}
-              </Typography>
+              <Typography variant="body2">{post.mark}</Typography>
             </Box>
           </Box>
         </Box>

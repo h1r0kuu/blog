@@ -11,16 +11,19 @@ import { RestorePasswordRequest } from "../models/auth/RestorePasswordRequest"
 const validateImage = (required: boolean) => {
   return yup
     .mixed<FileList>()
-    .test("fileSize", "The file is too large", (value) => {
-      if (value != null && value[0] != null) {
-        return value[0] && value[0].size <= MAX_IMAGE_SIZE
-      } else {
-        return !required
-      }
+    .test("required", "Image is required", (value) => {
+      return !(required && (value === null || value === undefined || value?.length <= 0))
     })
     .test("type", "Only the following formats are accepted: .jpeg, .jpg, .png, .gif", (value) => {
       if (value != null && value[0] != null) {
         return IMAGE_TYPES.includes(value[0].type)
+      } else {
+        return !required
+      }
+    })
+    .test("fileSize", "The file is too large", (value) => {
+      if (value != null && value[0] != null) {
+        return value[0] && value[0].size <= MAX_IMAGE_SIZE
       } else {
         return !required
       }
