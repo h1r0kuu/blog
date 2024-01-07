@@ -123,12 +123,22 @@ export const PostRatingBoxContent: SxProps<Theme> = {
 
 export const FirstIconsGroup: SxProps<Theme> = {
     display: 'inline-flex',
+    width: '33%',
     gap : '12px',
 };
 
 export const SecondIconsGroup: SxProps<Theme> = {
     display: 'inline-flex',
     alignItems: 'center',
+    width: '33%',
+    gap: '12px',
+};
+
+export const ThirdIconsGroup: SxProps<Theme> = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: '33%',
     gap: '12px',
 };
 

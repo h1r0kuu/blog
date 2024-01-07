@@ -17,6 +17,7 @@ import { StyledButton } from "../../components/StyledComponents/StyledComponents
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined"
 import { PROFILE } from "../../constants/pathConstants"
+import {ThirdIconsGroup} from "./PostPageStyles";
 
 const PostPage = (): ReactElement => {
   const [post, setPost] = useState<PostDto>()
@@ -174,7 +175,7 @@ const PostPage = (): ReactElement => {
                         </>
                       )}
                     </Box>
-                    <Box sx={Styles.SecondIconsGroup}>
+                    <Box sx={Styles.ThirdIconsGroup}>
                       <IconButton onClick={handleLikeClick}>
                         <ThumbUpAltRoundedIcon sx={{ color: markStatus === true ? "green" : "inherit" }} />
                       </IconButton>
