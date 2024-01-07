@@ -73,7 +73,7 @@ const VerifyToken = (): ReactElement => {
             >
               <DoneAllIcon />
             </IconButton>
-            You successfully verified your token
+            You successfully verified your email
           </Typography>
         </Box>
       </Modal>

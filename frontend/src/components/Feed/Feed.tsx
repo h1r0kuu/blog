@@ -14,7 +14,7 @@ const Feed = (): ReactElement => {
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await PostService.getAllPosts()
-      setPosts(response.data)
+      if (response) setPosts(response.data)
     }
     fetchPosts()
   }, [])

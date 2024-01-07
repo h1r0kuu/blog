@@ -106,6 +106,9 @@ export const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => 
   "& .MuiOutlinedInput-input": {
     fontWeight: 500,
     color: theme.palette.text.primary,
+    "&:-webkit-autofill": {
+      WebkitBoxShadow: "0 0 0 1000px #121212 inset",
+    },
   },
   "& .MuiOutlinedInput-notchedOutline": {
     borderRadius: "8px",

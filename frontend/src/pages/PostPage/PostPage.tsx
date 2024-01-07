@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState, useCallback } from "react"
 import { formatDistanceToNow } from "date-fns"
-import {useParams, useNavigate, Link} from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 import { Box, Typography, Card, CardContent, Avatar, IconButton, Button } from "@mui/material"
 import Header from "../../components/Header/Header"
 import * as Styles from "./PostPageStyles"
@@ -16,7 +16,7 @@ import UserService from "../../services/UserService"
 import { StyledButton } from "../../components/StyledComponents/StyledComponents"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined"
-import {PROFILE} from "../../constants/pathConstants";
+import { PROFILE } from "../../constants/pathConstants"
 
 const PostPage = (): ReactElement => {
   const [post, setPost] = useState<PostDto>()
@@ -50,8 +50,6 @@ const PostPage = (): ReactElement => {
     }
     fetchPosts()
   }, [id, navigate])
-
-
 
   const handleFollow = async () => {
     if (!isAuthenticated()) {
@@ -128,11 +126,9 @@ const PostPage = (): ReactElement => {
             ))}
           </Typography>
           <Box sx={Styles.PostDescription}>
-            <Link to={`${PROFILE}/${post?.creator.username}`}>
+            <Link to={`${PROFILE}/${post?.creator.username}`} style={{ display: "flex", alignItems: "center" }}>
               <Avatar src={post?.creator.avatar || ""} />
-            </Link>
-            <Link to={`${PROFILE}/${post?.creator.username}`} style={{ textDecoration: 'none'}}>
-              <Typography color="#448aff" variant="body1" style={{ textDecoration: 'none'}}>
+              <Typography color="#448aff" variant="body1" ml={2}>
                 {post?.creator.username || ""}
               </Typography>
             </Link>
