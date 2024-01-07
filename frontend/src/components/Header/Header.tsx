@@ -16,7 +16,7 @@ import {
 } from "@mui/material"
 import AdbIcon from "@mui/icons-material/Adb"
 import MenuIcon from "@mui/icons-material/Menu"
-import { HOME, LOGIN, PROFILE, REGISTRATION, SETTINGS, POST_CREATE } from "../../constants/pathConstants"
+import { HOME, LOGIN, PROFILE, REGISTRATION, SETTINGS, POST_CREATE, USER_FEED } from "../../constants/pathConstants"
 import { Link, useNavigate } from "react-router-dom"
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -46,6 +46,9 @@ const Header = (): ReactElement => {
       case "Create Post":
           navigate(POST_CREATE)
           break;
+      case "Feed":
+          navigate(USER_FEED)
+          break;
       default:
           break;
     }
@@ -61,12 +64,12 @@ const Header = (): ReactElement => {
                 event.preventDefault();
                 navigate(`/posts/search?q=${query}`);
             }
-        } else {
+        } else if(query !== ''){
             navigate(`/posts/search?q=${query}`);
         }
     }
 
-  const pages = ["Create Post"]
+  const pages = ["Create Post", "Feed"]
 
   return (
     <AppBar position="static">
@@ -153,7 +156,7 @@ const Header = (): ReactElement => {
               </Button>
             ))}
           </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+        <Box sx={{ flexGrow: 0, mr: 3, display: { xs: "none", md: "flex" } }}>
             <Paper
                 component="form"
                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}

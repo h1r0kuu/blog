@@ -138,11 +138,3 @@ export const TagsText: SxProps<Theme> = {
     lineHeight: '1.4',
     fontFamily: '-apple-system,BlinkMacSystemFont,Open Sans,Roboto,Helvetica Neue,Helvetica,sans-serif',
 };
-
-export const EditButtonStyle: SxProps<Theme> = {
-
-};
-
-export const DeleteButtonStyle: SxProps<Theme> = {
-
-};

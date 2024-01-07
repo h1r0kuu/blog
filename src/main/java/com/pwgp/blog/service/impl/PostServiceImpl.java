@@ -11,8 +11,10 @@ import com.pwgp.blog.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +29,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> FindAllPosts() {
-        return postRepository.findAll();
+        return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Override
@@ -46,7 +48,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post FindPostById(Long id) {
+    public Tag findTagByName(String tagName){
+        return tagRepository.findByNameIgnoreCase(tagName);
+    }
+
+    @Override
+    public Post findPostById(Long id) {
         return postRepository.getReferenceById(id);
     }
 
@@ -122,15 +129,64 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> searchPosts(String searchQuery) {
-        return postRepository.findByTitleContainingIgnoreCase(searchQuery).stream()
-                .map(postMapper::mapToPostDto).collect(Collectors.toList());
+    public List<PostDto> searchPosts(String searchQuery, Set<Tag> tags) {
+        List<Long> tagIds = tags == null ? null : tags.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+
+        if(searchQuery == null && tags == null){
+            return postRepository.findAll().stream()
+                    .map(postMapper::mapToPostDto).collect(Collectors.toList());
+        }
+        else if(searchQuery == null){
+            return findAllByTagsIn(tags).stream()
+                    .map(postMapper::mapToPostDto).collect(Collectors.toList());
+        }
+        else if(tags == null){
+            return postRepository.findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(searchQuery).stream()
+                    .map(postMapper::mapToPostDto).collect(Collectors.toList());
+        }
+        else{
+            return findAllByTitleContainingIgnoreCaseAndTagsIn(searchQuery, tags).stream()
+                    .map(postMapper::mapToPostDto).collect(Collectors.toList());
+        }
     }
 
     @Override
     public List<PostDto> findByUserUsername(String username) {
         return postRepository.findByCreatorUsername(username).stream()
                 .map(postMapper::mapToPostDto).collect(Collectors.toList());
+    }
+
+    private List<Post> findAllByTagsIn(Set<Tag> tagIds) {
+        List<Post> posts = postRepository.findAllByTagsInOrderByCreatedAtDesc(tagIds);
+        return posts.stream()
+                .filter(post -> post.getTags().containsAll(tagIds))
+                .collect(Collectors.toList());
+    }
+
+    private List<Post> findAllByTitleContainingIgnoreCaseAndTagsIn(String title, Set<Tag> tagIds) {
+        List<Post> posts = postRepository.findAllByTitleContainingIgnoreCaseAndTagsInOrderByCreatedAtDesc(title, tagIds);
+        return posts.stream()
+                .filter(post -> post.getTags().containsAll(tagIds))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<PostDto> getUserFeed(User user) {
+        Set<User> followings = user.getFollowings().stream()
+                .map(Follow::getFollowing)
+                .collect(Collectors.toSet());
+
+        List<PostDto> posts = followings.stream()
+                .map(User::getPosts)
+                .flatMap(Set::stream)
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .map(postMapper::mapToPostDto)
+                .collect(Collectors.toList());
+
+        return posts;
     }
 
 }

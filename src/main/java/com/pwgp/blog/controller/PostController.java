@@ -4,6 +4,7 @@ package com.pwgp.blog.controller;
 
 import com.pwgp.blog.dto.post.*;
 import com.pwgp.blog.entity.Post;
+import com.pwgp.blog.entity.Tag;
 import com.pwgp.blog.entity.User;
 import com.pwgp.blog.exception.UsernameNotFoundException;
 import com.pwgp.blog.mapper.PostMapper;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.pwgp.blog.constants.PathConstants.*;
@@ -89,8 +91,13 @@ public class PostController {
     }
 
     @GetMapping(SEARCH_POSTS)
-    public ResponseEntity<List<PostDto>> searchPosts(@RequestParam("q") String query){
-        List<PostDto> posts = postService.searchPosts(query);
+    public ResponseEntity<List<PostDto>> searchPosts(@RequestParam(value = "q", required = false) String query,
+                                                      @RequestParam(value = "tags", required = false) Set<String> tagNames){
+        Set<Tag> tags = tagNames == null ? null : tagNames.stream()
+                .map(postMapper::mapToTagEntity)
+                .collect(Collectors.toSet());
+
+        List<PostDto> posts = postService.searchPosts(query, tags);
         return ResponseEntity.status(200).body(posts);
     }
 
@@ -98,4 +105,15 @@ public class PostController {
     public ResponseEntity<List<PostDto>> findPostsByUser(@PathVariable("username") String username){
         return ResponseEntity.status(200).body(postService.findByUserUsername(username));
     }
+
+    @GetMapping(GET_USER_FEED)
+    public ResponseEntity<List<PostDto>> getUserFeed(){
+        try{
+            User user = authenticationService.getAuthenticatedUser();
+            return ResponseEntity.status(200).body(postService.getUserFeed(user));
+        }catch (UsernameNotFoundException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
 }

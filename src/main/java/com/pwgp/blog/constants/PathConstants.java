@@ -36,6 +36,7 @@ public final class PathConstants {
     public static final String POST_UPDATE = POST_BY_ID + "/update";
     public static final String POST_MARK_UPDATE = "/mark/update";
     public static final String SEARCH_POSTS = "/search";
+    public static final String GET_USER_FEED = "/feed";
     public static final String USER_POSTS = "/user/{username}";
 
     public static final String API_V1_TAGS = API_V1 + "/tags";

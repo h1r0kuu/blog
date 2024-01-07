@@ -101,6 +101,10 @@ public class PostMapper {
         return postDto;
     }
 
+    public Tag mapToTagEntity(String tagName){
+        return tagRepository.findByName(tagName);
+    }
+
     public int calculateMarkValue(Set<Mark> marks){
         return (getPositiveMarksCount(marks) - getNegativeMarksCount(marks));
     }

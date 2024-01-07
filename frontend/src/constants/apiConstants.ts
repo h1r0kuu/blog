@@ -28,7 +28,8 @@ export const POST_DELETE_URL = (id: number) => `${POST_URL}/${id}/delete`
 export const POST_UPDATE_URL = (id: number) => `${POST_URL}/${id}/update`
 export const POST_MARK_UPDATE = POST_URL + "/mark/update"
 export const FIND_BY_USER_USERNAME = (username: string) => `${POST_URL}/user/${username}`
-export const FIND_BY_QUERY = `${POST_URL}/search`
+export const FIND_BY_PARAMS = `${POST_URL}/search`
+export const USER_FEED = POST_URL + "/feed"
 
 export const TAG_URL = API_URL + "/tags"
 export const GET_ALL_TAGS_URL = TAG_URL + "/"

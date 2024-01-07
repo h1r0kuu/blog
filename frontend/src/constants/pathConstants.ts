@@ -7,4 +7,9 @@ export const SETTINGS = "/settings"
 export const POST = "/posts"
 
 export const VERIFY_TOKEN = "/verify/:token"
+export const POST_PAGE = POST + "/:id"
 export const POST_CREATE = POST + "/create"
+export const POST_UPDATE = POST + "/:id/update"
+export const USER_FEED = POST + "/feed"
+export const SEARCH_PAGE = POST + "/search"
+

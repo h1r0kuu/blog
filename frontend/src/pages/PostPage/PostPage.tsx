@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState, useCallback } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { useParams, useNavigate } from "react-router-dom"
+import {useParams, useNavigate, Link} from "react-router-dom"
 import { Box, Typography, Card, CardContent, Avatar, IconButton, Button } from "@mui/material"
 import Header from "../../components/Header/Header"
 import * as Styles from "./PostPageStyles"
@@ -16,6 +16,7 @@ import UserService from "../../services/UserService"
 import { StyledButton } from "../../components/StyledComponents/StyledComponents"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined"
+import {PROFILE} from "../../constants/pathConstants";
 
 const PostPage = (): ReactElement => {
   const [post, setPost] = useState<PostDto>()
@@ -26,13 +27,19 @@ const PostPage = (): ReactElement => {
   const [negativeMarks, setNegativeMarks] = useState<number>(0)
   const [views, setViews] = useState<number>(0)
   const { isAuthenticated, user } = useAuth()
+  const [isLoading, setIsLoading] = useState(true)
   const [isFollowed, setIsFollowed] = useState<boolean | null>(false)
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setIsLoading(true)
         const response = await PostService.getPostById(Number(id))
         setPost(response.data)
+        setIsLoading(false)
+        if(!isLoading && post === undefined){
+          navigate("*")
+        }
         setMarkStatus(response.data.markStatus)
         setIsFollowed(response.data.isMyProfileSubscribed)
         setPositiveMarks(response.data.positiveMarks ?? 0)
@@ -43,6 +50,8 @@ const PostPage = (): ReactElement => {
     }
     fetchPosts()
   }, [id, navigate])
+
+
 
   const handleFollow = async () => {
     if (!isAuthenticated()) {
@@ -96,6 +105,11 @@ const PostPage = (): ReactElement => {
     navigate(`update`, { state: { post } })
   }
 
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  else{}
+
   return (
     <Box sx={Styles.MainBox}>
       <Header />
@@ -106,14 +120,22 @@ const PostPage = (): ReactElement => {
             {post?.title || ""}
           </Typography>
           <Typography sx={Styles.TagsText}>
-            <SellIcon />
-            {post?.tags?.map((tag, tagIndex) => `${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`)}
+            <SellIcon />{' '}
+            {post?.tags?.map((tag, tagIndex) => (
+                <Link to={`/posts/search?tags=${tag.name}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {`${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`}
+                </Link>
+            ))}
           </Typography>
           <Box sx={Styles.PostDescription}>
-            <Avatar src={post?.creator.avatar || ""} />
-            <Typography color="#448aff" variant="body1">
-              {post?.creator.username || ""}
-            </Typography>
+            <Link to={`${PROFILE}/${post?.creator.username}`}>
+              <Avatar src={post?.creator.avatar || ""} />
+            </Link>
+            <Link to={`${PROFILE}/${post?.creator.username}`} style={{ textDecoration: 'none'}}>
+              <Typography color="#448aff" variant="body1" style={{ textDecoration: 'none'}}>
+                {post?.creator.username || ""}
+              </Typography>
+            </Link>
             {isAuthenticated() && user.username !== post?.creator.username && (
               <StyledButton variant={isFollowed ? "outlined" : "contained"} onClick={handleFollow}>
                 {isFollowed ? "Unfollow" : "Follow"}

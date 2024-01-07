@@ -5,13 +5,17 @@ import com.pwgp.blog.entity.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public interface PostService {
 
 
     List<Post> FindAllPosts();
-    Post FindPostById(Long id);
+
+    Tag findTagByName(String tagName);
+
+    Post findPostById(Long id);
 
     void create(PostCreationRequest postCreationRequest);
 
@@ -29,7 +33,9 @@ public interface PostService {
 
     void updatePost(Long post_id, PostUpdateRequest postUpdateRequest);
 
-    List<PostDto> searchPosts(String searchQuery);
+    List<PostDto> searchPosts(String searchQuery, Set<Tag> tags);
 
     List<PostDto> findByUserUsername(String username);
+
+    List<PostDto> getUserFeed(User user);
 }

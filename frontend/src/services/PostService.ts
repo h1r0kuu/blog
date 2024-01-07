@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios"
+import qs from 'qs';
 import { PostDto } from "../models/post/PostDto"
 import { TagDto } from "../models/post/TagDto"
 import { PostCreationRequest } from "../models/post/PostCreationRequest"
@@ -11,12 +12,13 @@ import {
   POST_MARK_UPDATE,
   POST_DELETE_URL,
   POST_UPDATE_URL,
-  FIND_BY_USER_USERNAME, FIND_BY_QUERY,
+  FIND_BY_USER_USERNAME, FIND_BY_PARAMS, USER_FEED,
 } from "../constants/apiConstants"
 import { MarkUpdateRequest } from "../models/post/MarkUpdateRequest"
 import { MarkUpdateResponse } from "../models/post/MarkUpdateResponse"
 import PostUpdatePage from "../pages/PostUpdatePage/PostUpdatePage"
 import { PostUpdateRequest } from "../models/post/PostUpdateRequest"
+import {array} from "yup";
 
 export default class PostService {
   static async getAllPosts(): Promise<AxiosResponse<PostDto[]>> {
@@ -63,10 +65,24 @@ export default class PostService {
   }
 
   static async findByQuery(query: string): Promise<AxiosResponse<PostDto[]>> {
-    return await api.get<PostDto[]>(FIND_BY_QUERY, {
+    return await api.get<PostDto[]>(FIND_BY_PARAMS, {
       params: {
         q: query
       }
     });
   }
+
+  static async findByTags(tags: String[]): Promise<AxiosResponse<PostDto[]>> {
+    return await api.get<PostDto[]>(FIND_BY_PARAMS, {
+      params: {
+        tags: tags
+      },
+      paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
+    });
+  }
+
+  static async getUserFeed(): Promise<AxiosResponse<PostDto[]>> {
+    return await api.get<PostDto[]>(USER_FEED)
+  }
+
 }
