@@ -77,9 +77,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String changeGeneralSettings(ChangeGeneralSettingsRequest request) {
         User user = authenticationService.getAuthenticatedUser();
-        if(userRepository.isUserExistByEmail(request.getEmail()) && !user.getEmail().equals(request.getEmail())) {
+        String requestedEmail = request.getEmail();
+        String existingEmail = user.getEmail();
+        boolean sameEmail = requestedEmail.equals(existingEmail);
+
+        if(userRepository.isUserExistByEmail(request.getEmail()) && !sameEmail) {
             throw new EmailAlreadyTakenException(EMAIL_HAS_ALREADY_BEEN_TAKEN);
+        } else if(!sameEmail) {
+            user.setIsEmailVerified(false);
         }
+
         if(userRepository.isUserExistByUsername(request.getUsername()) && !user.getUsername().equals(request.getUsername())) {
             throw new UserAlreadyExistException(USERNAME_HAS_ALREADY_BEEN_TAKEN);
         }

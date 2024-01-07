@@ -6,6 +6,7 @@ public interface UserProjection {
     Long getId();
     String getUsername();
     String getEmail();
+    String getAbout();
     String getAvatar();
     String getCover();
     boolean getIsEmailVerified();

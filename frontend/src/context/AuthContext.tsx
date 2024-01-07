@@ -50,7 +50,7 @@ const AuthProvider: FC<ProviderProps> = ({ children }): ReactElement => {
         nav(HOME)
       })
       .catch((e) => {
-        console.log(e)
+        alert("Bad credentials")
       })
   }
 
