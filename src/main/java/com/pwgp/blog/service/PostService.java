@@ -3,6 +3,8 @@ package com.pwgp.blog.service;
 import com.pwgp.blog.dto.post.*;
 import com.pwgp.blog.entity.*;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -11,7 +13,7 @@ import java.util.Set;
 public interface PostService {
 
 
-    List<Post> FindAllPosts();
+    Page<Post> FindAllPosts(Pageable pageable);
 
     Tag findTagByName(String tagName);
 

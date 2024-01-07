@@ -11,6 +11,8 @@ import com.pwgp.blog.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +30,8 @@ public class PostServiceImpl implements PostService {
     private final AuthenticationService authenticationService;
 
     @Override
-    public List<Post> FindAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
+    public Page<Post> FindAllPosts(Pageable pageable) {
+        return postRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     @Override

@@ -21,8 +21,15 @@ import { PostUpdateRequest } from "../models/post/PostUpdateRequest"
 import {array} from "yup";
 
 export default class PostService {
-  static async getAllPosts(): Promise<AxiosResponse<PostDto[]>> {
-    return await api.get<PostDto[]>(GET_ALL_POSTS_URL)
+  static async getAllPosts(page: number, pageSize: number): Promise<AxiosResponse<{content: PostDto[]}>> {
+    const response = await api.get<{content: PostDto[]}>(GET_ALL_POSTS_URL, {
+      params: {
+        page: page,
+        size: pageSize
+      },
+      paramsSerializer: params => qs.stringify(params)
+    });
+    return response;
   }
   static async getPostById(id: number): Promise<AxiosResponse<PostDto>> {
     const response = await api.get<PostDto>(GET_POST_BY_ID(id))

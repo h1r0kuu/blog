@@ -12,6 +12,9 @@ import com.pwgp.blog.service.AuthenticationService;
 import com.pwgp.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +37,13 @@ public class PostController {
 
 
     @GetMapping(ALL_POSTS)
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> posts = postService.FindAllPosts()
+    public ResponseEntity<Page<PostDto>> getAllPosts(Pageable pageable){
+        List<PostDto> postsList = postService.FindAllPosts(pageable)
                 .stream()
-                .map(postMapper::mapToPostDto).collect(Collectors.toList());
-        return ResponseEntity.status(200).body(posts);
+                .map(postMapper::mapToPostDto)
+                .collect(Collectors.toList());
+        Page<PostDto> postsPage = new PageImpl<>(postsList, pageable, postsList.size());
+        return ResponseEntity.status(200).body(postsPage);
     }
 
     @GetMapping(POST_BY_ID)

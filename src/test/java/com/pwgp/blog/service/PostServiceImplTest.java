@@ -19,6 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +61,12 @@ public class PostServiceImplTest {
     @Test
     public void testFindAllPosts() {
         List<Post> mockPosts = new ArrayList<>();
-        when(postRepository.findAll()).thenReturn(mockPosts);
+        when(postRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(mockPosts));
 
-        List<Post> result = postService.FindAllPosts();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Post> result = postService.FindAllPosts(pageable);
 
-        assertEquals(mockPosts, result);
+        assertEquals(new PageImpl<>(mockPosts), result);
     }
 
     @Test
