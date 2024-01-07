@@ -16,6 +16,7 @@ import { postCreationSchema } from "../../schemas/validationSchemas";
 import {ValidationError} from "yup";
 import { groupBy } from 'lodash';
 import { useNavigate } from "react-router-dom";
+import { CircularProgress, Stack } from '@mui/material';
 
 
 const PostCreationPage = (): ReactElement => {
@@ -27,6 +28,7 @@ const PostCreationPage = (): ReactElement => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const { isAuthenticated, user } = useAuth()
   const [ errors, setErrors ] = useState<any>({});
+  const [ isLoading, setIsLoading ] = useState(true);
 
 
   const [title, setTitle] = useState('');
@@ -52,6 +54,7 @@ const PostCreationPage = (): ReactElement => {
     const fetchTags = async () => {
       const response = await PostService.getAllTags();
       setTags(response.data);
+      setIsLoading(false);
     };
 
     fetchTags();
@@ -84,10 +87,9 @@ const PostCreationPage = (): ReactElement => {
       poster: file || undefined,
     };
 
-    console.log(postRequest)
-
     try {
       await postCreationSchema.validate(postRequest, {abortEarly: false});
+      setIsLoading(true)
       let response = await PostService.create(postRequest);
       let createdPostId = response.data as number;
       navigate('/posts/' + createdPostId);
@@ -106,7 +108,18 @@ const PostCreationPage = (): ReactElement => {
         <Header />
         <Box sx={Styles.backgroundImageBox} style={{backgroundImage: `url(${uploadedImageUrl})`}} />
 
-        <Box sx={Styles.MainContentBox}>
+
+        <Box sx={{...Styles.MainContentBox, '&::after': {
+            content: '""',
+            position: 'absolute',
+            display: isLoading ? 'block' : 'none',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 10,
+          }}}>
 
           <Tabs sx={Styles.TabsBox} value={tabNumber} onChange={handleChange}>
             <Tab label="General" />
@@ -114,6 +127,13 @@ const PostCreationPage = (): ReactElement => {
           </Tabs>
 
           <Box component="form" sx={Styles.FormBox} onSubmit={onSubmit}>
+
+            {isLoading && (
+                <Stack sx={Styles.LoadingScreenStyles}>
+                  <CircularProgress />
+                </Stack>
+            )}
+
             {tabNumber === 0 && (
                 <Box sx={Styles.FormBox}>
                   <ImageUploadBox

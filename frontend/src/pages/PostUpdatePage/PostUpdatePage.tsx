@@ -17,9 +17,10 @@ import { postUpdateSchema } from "../../schemas/validationSchemas";
 import {ValidationError} from "yup";
 import { groupBy } from 'lodash';
 import {useNavigate, useLocation, useParams} from "react-router-dom";
+import {PostDto} from "../../models/post/PostDto";
 
 const PostUpdatePage = (): ReactElement => {
-    const [post, setPost] = useState<any>(useLocation().state.post);
+    const [post, setPost] = useState<PostDto | undefined>(useLocation().state?.post);
     const [tabNumber, setTabNumber] = useState(0);
     const [tags, setTags] = useState<TagDto[]>([]);
     const [selectedTags, setSelectedTags] = useState<TagDto[]>([]);
@@ -28,9 +29,10 @@ const PostUpdatePage = (): ReactElement => {
     const { isAuthenticated, user } = useAuth()
     const [ errors, setErrors ] = useState<any>({});
     const { id } = useParams()
+    const [ isAllowed, setIsAllowed ] = useState<boolean>(false)
 
     const [editorState, setEditorState] = useState(() => {
-        const blocksFromHtml = htmlToDraft(post.body);
+        const blocksFromHtml = htmlToDraft(post?.body || '');
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
         return EditorState.createWithContent(contentState);
@@ -40,35 +42,33 @@ const PostUpdatePage = (): ReactElement => {
     const [description, setDescription] = useState('');
     const [tagIds, setTagIds] = useState<number[]>([]);
     const [body, setBody] = useState('');
-
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isAuthenticated()) {
-            navigate('/404');
-        }
-    }, [isAuthenticated, navigate]);
+
+
+    const fetchTags = async () => {
+        const response = await PostService.getAllTags();
+        setTags(response.data);
+        const correspondingTags = response.data.filter(tag => post?.tags.some((t: TagDto) => t.id === tag.id));
+        setSelectedTags(correspondingTags);
+    };
 
     useEffect(() => {
-        if (post) {
+        if (!isAuthenticated() || !post || user.username !== post.creator.username) {
+            navigate('*');
+
+        }else {
             setFile(null)
             setTitle(post.title);
             setDescription(post.description);
             setBody(post.body);
             setUploadedImageUrl(post.posterUrl);
+            setIsAllowed(true);
+
+            fetchTags();
         }
-    }, [post]);
 
-    useEffect(() => {
-        const fetchTags = async () => {
-            const response = await PostService.getAllTags();
-            setTags(response.data);
-            const correspondingTags = response.data.filter(tag => post.tags.some((t: TagDto) => t.id === tag.id));
-            setSelectedTags(correspondingTags);
-        };
-
-        fetchTags();
-    }, [post]);
+    }, [post, isAuthenticated, navigate, isAllowed, user]);
 
     const onEditorStateChange = (editorState: EditorState) => {
         setEditorState(editorState);
@@ -125,6 +125,10 @@ const PostUpdatePage = (): ReactElement => {
             }
         }
     };
+
+    if(!isAllowed) {
+        return <></>;
+    }
 
     return (
         <Box sx={Styles.MainBox}>

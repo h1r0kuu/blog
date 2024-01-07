@@ -96,12 +96,20 @@ const PostPage = (): ReactElement => {
   }
 
   const handleDeleteClick = async () => {
-    await PostService.delete(Number(id))
-    navigate(`/`)
+    if(!isAuthenticated() || user.username !== post?.creator.username){
+        return
+    }else{
+      await PostService.delete(Number(id))
+      navigate(`/`)
+    }
   }
 
   const handleEditClick = () => {
-    navigate(`update`, { state: { post } })
+    if(!isAuthenticated() || user.username !== post?.creator.username){
+      return
+    }else{
+      navigate(`update`, { state: { post } })
+    }
   }
 
   if (isLoading) {

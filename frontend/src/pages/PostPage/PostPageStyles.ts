@@ -84,7 +84,12 @@ export const PostBodyBox: SxProps<Theme> = {
         p: 2,
         mt: 2,
         mb: 2,
+        '& img': {
+            maxWidth: '100%',
+            maxHeight: '100%',
+        },
         overflowWrap: 'break-word',
+        wordWrap: 'break-word',
         fontSize: '1rem',
         lineHeight: '1.4',
         fontFamily: '-apple-system,BlinkMacSystemFont,Open Sans,Roboto,Helvetica Neue,Helvetica,sans-serif',
