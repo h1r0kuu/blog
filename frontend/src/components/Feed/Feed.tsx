@@ -21,7 +21,8 @@ const Feed = (): ReactElement => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', marginTop: 4 }}>
-      {posts && posts.map((post: PostDto, index: number) => (
+      {posts &&
+          posts.map((post: PostDto, index: number) => (
           <Card key={index} sx={{ display: 'flex', flexDirection: 'column', border: '1px solid grey', borderRadius: 4, maxWidth: 600, width: '100%' }}>
             <Link to={`${POST}/${post.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <CardMedia

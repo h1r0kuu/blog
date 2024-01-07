@@ -37,7 +37,7 @@ const PostPage = (): ReactElement => {
         const response = await PostService.getPostById(Number(id))
         setPost(response.data)
         setIsLoading(false)
-        if(!isLoading && post === undefined){
+        if(!isLoading && !post){
           navigate("*")
         }
         setMarkStatus(response.data.markStatus)
@@ -49,7 +49,7 @@ const PostPage = (): ReactElement => {
       }
     }
     fetchPosts()
-  }, [id, navigate])
+  }, [id, navigate, isLoading])
 
   const handleFollow = async () => {
     if (!isAuthenticated()) {
@@ -112,84 +112,84 @@ const PostPage = (): ReactElement => {
     <Box sx={Styles.MainBox}>
       <Header />
       <Box sx={Styles.backgroundImageBox} style={{ backgroundImage: `url(${post?.posterUrl || ""})` }} />
-      <Box sx={Styles.MainContentBox}>
-        <Box sx={Styles.PostInfoBox}>
-          <Typography variant="h5" sx={Styles.PostTitle}>
-            {post?.title || ""}
-          </Typography>
-          <Typography sx={Styles.TagsText}>
-            <SellIcon />{' '}
-            {post?.tags?.map((tag, tagIndex) => (
-                <Link to={`/posts/search?tags=${tag.name}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {`${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`}
-                </Link>
-            ))}
-          </Typography>
-          <Box sx={Styles.PostDescription}>
-            <Link to={`${PROFILE}/${post?.creator.username}`} style={{ display: "flex", alignItems: "center" }}>
-              <Avatar src={post?.creator.avatar || ""} />
-              <Typography color="#448aff" variant="body1" ml={2}>
-                {post?.creator.username || ""}
+      {post && (
+              <Box sx={Styles.MainContentBox}>
+            <Box sx={Styles.PostInfoBox}>
+              <Typography variant="h5" sx={Styles.PostTitle}>
+                {post?.title || ""}
               </Typography>
-            </Link>
-            {isAuthenticated() && user.username !== post?.creator.username && (
-              <StyledButton variant={isFollowed ? "outlined" : "contained"} onClick={handleFollow}>
-                {isFollowed ? "Unfollow" : "Follow"}
-              </StyledButton>
-            )}
-            <Typography color="rgb(126, 126, 132)" variant="body2">
-              {formatDistanceToNow(new Date(post?.createdAt || Date.now()))} ago
-            </Typography>{" "}
-          </Box>
-        </Box>
-        <Card sx={Styles.PostBodyBox}>
-          <CardContent>
-            <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post?.body || "" }} />{" "}
-            <Card sx={Styles.PostRatingBox}>
-              <CardContent sx={Styles.PostRatingBoxContent}>
-                <Box sx={Styles.FirstIconsGroup}>
-                  <VisibilityIcon />
-                  <Typography>{post?.views || 0}</Typography>
-                  <ChatBubbleRoundedIcon />
-                  <Typography>0</Typography>
-                </Box>
-                <Box sx={Styles.SecondIconsGroup}>
-                  {isAuthenticated() && user.username === post?.creator.username && (
-                    <>
-                      <Button
-                        onClick={handleDeleteClick}
-                        variant="outlined"
-                        color="error"
-                        startIcon={<DeleteOutlineOutlinedIcon />}
-                      >
-                        DELETE
-                      </Button>
-                      <Button
-                        onClick={handleEditClick}
-                        variant="outlined"
-                        color="info"
-                        startIcon={<EditNoteOutlinedIcon />}
-                      >
-                        EDIT
-                      </Button>
-                    </>
-                  )}
-                </Box>
-                <Box sx={Styles.SecondIconsGroup}>
-                  <IconButton onClick={handleLikeClick}>
-                    <ThumbUpAltRoundedIcon sx={{ color: markStatus === true ? "green" : "inherit" }} />
-                  </IconButton>
-                  <Typography color="#4baf50">{positiveMarks}</Typography>|
-                  <Typography color="#ba6163">-{negativeMarks}</Typography>
-                  <IconButton onClick={handleDislikeClick}>
-                    <ThumbDownAltRoundedIcon sx={{ color: markStatus === false ? "red" : "inherit" }} />
-                  </IconButton>
-                </Box>
+              <Typography sx={Styles.TagsText}>
+                <SellIcon />{' '}
+                {post?.tags?.map((tag, tagIndex) => (
+                    <Link to={`/posts/search?tags=${tag.name}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {`${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`}
+                    </Link>
+                ))}
+              </Typography>
+              <Box sx={Styles.PostDescription}>
+                <Link to={`${PROFILE}/${post?.creator.username}`} style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar src={post?.creator.avatar || ""} />
+                  <Typography color="#448aff" variant="body1" ml={2}>
+                    {post?.creator.username || ""}
+                  </Typography>
+                </Link>
+                {isAuthenticated() && user.username !== post?.creator.username && (
+                  <StyledButton variant={isFollowed ? "outlined" : "contained"} onClick={handleFollow}>
+                    {isFollowed ? "Unfollow" : "Follow"}
+                  </StyledButton>
+                )}
+                <Typography color="rgb(126, 126, 132)" variant="body2">
+                  {formatDistanceToNow(new Date(post?.createdAt || Date.now()))} ago
+                </Typography>{" "}
+              </Box>
+            </Box>
+            <Card sx={Styles.PostBodyBox}>
+              <CardContent>
+                <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post?.body || "" }} />{" "}
+                <Card sx={Styles.PostRatingBox}>
+                  <CardContent sx={Styles.PostRatingBoxContent}>
+                    <Box sx={Styles.FirstIconsGroup}>
+                      <VisibilityIcon />
+                      <Typography>{post?.views || 0}</Typography>
+                    </Box>
+                    <Box sx={Styles.SecondIconsGroup}>
+                      {isAuthenticated() && user.username === post?.creator.username && (
+                        <>
+                          <Button
+                            onClick={handleDeleteClick}
+                            variant="outlined"
+                            color="error"
+                            startIcon={<DeleteOutlineOutlinedIcon />}
+                          >
+                            DELETE
+                          </Button>
+                          <Button
+                            onClick={handleEditClick}
+                            variant="outlined"
+                            color="info"
+                            startIcon={<EditNoteOutlinedIcon />}
+                          >
+                            EDIT
+                          </Button>
+                        </>
+                      )}
+                    </Box>
+                    <Box sx={Styles.SecondIconsGroup}>
+                      <IconButton onClick={handleLikeClick}>
+                        <ThumbUpAltRoundedIcon sx={{ color: markStatus === true ? "green" : "inherit" }} />
+                      </IconButton>
+                      <Typography color="#4baf50">{positiveMarks}</Typography>|
+                      <Typography color="#ba6163">-{negativeMarks}</Typography>
+                      <IconButton onClick={handleDislikeClick}>
+                        <ThumbDownAltRoundedIcon sx={{ color: markStatus === false ? "red" : "inherit" }} />
+                      </IconButton>
+                    </Box>
+                  </CardContent>
+                </Card>
               </CardContent>
             </Card>
-          </CardContent>
-        </Card>
       </Box>
+      )}
     </Box>
   )
 }
