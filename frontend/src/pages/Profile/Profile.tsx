@@ -136,7 +136,13 @@ const Profile = (): ReactElement => {
           <TabContext value={value}>
             <StyledCard>
               <Box sx={{ height: 200, width: "100%", overflow: "hidden" }}>
-                <img src={profile.cover} alt="User Cover" height="100%" width="100%" style={{ objectFit: "cover" }} />
+                <img
+                  src={profile.cover}
+                  alt="User Cover"
+                  height="100%"
+                  width="100%"
+                  style={{ backgroundSize: "cover" }}
+                />
               </Box>
 
               <Box

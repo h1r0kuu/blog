@@ -159,15 +159,6 @@ const GeneralSettings = (): ReactElement => {
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif max size of 3.0 MB
                 </Small>
-
-                <Box maxWidth={250} marginTop={5} marginBottom={1}>
-                  <SwitchWrapper>
-                    <Typography display="block" fontWeight={600}>
-                      Private Profile
-                    </Typography>
-                    <Switch />
-                  </SwitchWrapper>
-                </Box>
               </Card>
             </Grid>
             <Grid item md={8} xs={12}>

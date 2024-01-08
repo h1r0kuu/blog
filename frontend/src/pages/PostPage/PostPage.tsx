@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState} from "react"
+import { ReactElement, useEffect, useState } from "react"
 import { formatDistanceToNow } from "date-fns"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { Box, Typography, Card, CardContent, Avatar, IconButton, Button } from "@mui/material"
@@ -35,7 +35,7 @@ const PostPage = (): ReactElement => {
         const response = await PostService.getPostById(Number(id))
         setPost(response.data)
         setIsLoading(false)
-        if(!isLoading && !post){
+        if (!isLoading && !post) {
           navigate("*")
         }
         setMarkStatus(response.data.markStatus)
@@ -47,7 +47,7 @@ const PostPage = (): ReactElement => {
       }
     }
     fetchPosts()
-  }, [id, navigate, isLoading])
+  }, [id, navigate])
 
   const handleFollow = async () => {
     if (!isAuthenticated()) {
@@ -93,108 +93,108 @@ const PostPage = (): ReactElement => {
   }
 
   const handleDeleteClick = async () => {
-    if(!isAuthenticated() || user.username !== post?.creator.username){
-        return
-    }else{
+    if (!isAuthenticated() || user.username !== post?.creator.username) {
+      return
+    } else {
       await PostService.delete(Number(id))
       navigate(`/`)
     }
   }
 
   const handleEditClick = () => {
-    if(!isAuthenticated() || user.username !== post?.creator.username){
+    if (!isAuthenticated() || user.username !== post?.creator.username) {
       return
-    }else{
+    } else {
       navigate(`update`, { state: { post } })
     }
   }
 
   if (isLoading) {
     return <div>Loading...</div>
+  } else {
   }
-  else{}
 
   return (
     <Box sx={Styles.MainBox}>
       <Header />
       <Box sx={Styles.backgroundImageBox} style={{ backgroundImage: `url(${post?.posterUrl || ""})` }} />
       {post && (
-              <Box sx={Styles.MainContentBox}>
-            <Box sx={Styles.PostInfoBox}>
-              <Typography variant="h5" sx={Styles.PostTitle}>
-                {post?.title || ""}
-              </Typography>
-              <Typography sx={Styles.TagsText}>
-                <SellIcon />{' '}
-                {post?.tags?.map((tag, tagIndex) => (
-                    <Link to={`/posts/search?tags=${tag.name}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {`${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`}
-                    </Link>
-                ))}
-              </Typography>
-              <Box sx={Styles.PostDescription}>
-                <Link to={`${PROFILE}/${post?.creator.username}`} style={{ display: "flex", alignItems: "center" }}>
-                  <Avatar src={post?.creator.avatar || ""} />
-                  <Typography color="#448aff" variant="body1" ml={2}>
-                    {post?.creator.username || ""}
-                  </Typography>
+        <Box sx={Styles.MainContentBox}>
+          <Box sx={Styles.PostInfoBox}>
+            <Typography variant="h5" sx={Styles.PostTitle}>
+              {post?.title || ""}
+            </Typography>
+            <Typography sx={Styles.TagsText}>
+              <SellIcon />{" "}
+              {post?.tags?.map((tag, tagIndex) => (
+                <Link to={`/posts/search?tags=${tag.name}`} style={{ textDecoration: "none", color: "inherit" }}>
+                  {`${tag.name}${tagIndex !== post?.tags.length - 1 ? ", " : ""}`}
                 </Link>
-                {isAuthenticated() && user.username !== post?.creator.username && (
-                  <StyledButton variant={isFollowed ? "outlined" : "contained"} onClick={handleFollow}>
-                    {isFollowed ? "Unfollow" : "Follow"}
-                  </StyledButton>
-                )}
-                <Typography color="rgb(126, 126, 132)" variant="body2">
-                  {formatDistanceToNow(new Date(post?.createdAt || Date.now()))} ago
-                </Typography>{" "}
-              </Box>
+              ))}
+            </Typography>
+            <Box sx={Styles.PostDescription}>
+              <Link to={`${PROFILE}/${post?.creator.username}`} style={{ display: "flex", alignItems: "center" }}>
+                <Avatar src={post?.creator.avatar || ""} />
+                <Typography color="#448aff" variant="body1" ml={2}>
+                  {post?.creator.username || ""}
+                </Typography>
+              </Link>
+              {isAuthenticated() && user.username !== post?.creator.username && (
+                <StyledButton variant={isFollowed ? "outlined" : "contained"} onClick={handleFollow}>
+                  {isFollowed ? "Unfollow" : "Follow"}
+                </StyledButton>
+              )}
+              <Typography color="rgb(126, 126, 132)" variant="body2">
+                {formatDistanceToNow(new Date(post?.createdAt || Date.now()))} ago
+              </Typography>{" "}
             </Box>
-            <Card sx={Styles.PostBodyBox}>
-              <CardContent>
-                <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post?.body || "" }} />{" "}
-                <Card sx={Styles.PostRatingBox}>
-                  <CardContent sx={Styles.PostRatingBoxContent}>
-                    <Box sx={Styles.FirstIconsGroup}>
-                      <VisibilityIcon />
-                      <Typography>{post?.views || 0}</Typography>
-                    </Box>
-                    <Box sx={Styles.SecondIconsGroup}>
-                      {isAuthenticated() && user.username === post?.creator.username && (
-                        <>
-                          <Button
-                            onClick={handleDeleteClick}
-                            variant="outlined"
-                            color="error"
-                            startIcon={<DeleteOutlineOutlinedIcon />}
-                          >
-                            DELETE
-                          </Button>
-                          <Button
-                            onClick={handleEditClick}
-                            variant="outlined"
-                            color="info"
-                            startIcon={<EditNoteOutlinedIcon />}
-                          >
-                            EDIT
-                          </Button>
-                        </>
-                      )}
-                    </Box>
-                    <Box sx={Styles.ThirdIconsGroup}>
-                      <IconButton onClick={handleLikeClick}>
-                        <ThumbUpAltRoundedIcon sx={{ color: markStatus === true ? "green" : "inherit" }} />
-                      </IconButton>
-                      <Typography color="#4baf50">{positiveMarks}</Typography>|
-                      <Typography color="#ba6163">-{negativeMarks}</Typography>
-                      <IconButton onClick={handleDislikeClick}>
-                        <ThumbDownAltRoundedIcon sx={{ color: markStatus === false ? "red" : "inherit" }} />
-                      </IconButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </CardContent>
-            </Card>
-      </Box>
+          </Box>
+          <Card sx={Styles.PostBodyBox}>
+            <CardContent>
+              <Typography variant="body1" dangerouslySetInnerHTML={{ __html: post?.body || "" }} />{" "}
+              <Card sx={Styles.PostRatingBox}>
+                <CardContent sx={Styles.PostRatingBoxContent}>
+                  <Box sx={Styles.FirstIconsGroup}>
+                    <VisibilityIcon />
+                    <Typography>{post?.views || 0}</Typography>
+                  </Box>
+                  <Box sx={Styles.SecondIconsGroup}>
+                    {isAuthenticated() && user.username === post?.creator.username && (
+                      <>
+                        <Button
+                          onClick={handleDeleteClick}
+                          variant="outlined"
+                          color="error"
+                          startIcon={<DeleteOutlineOutlinedIcon />}
+                        >
+                          DELETE
+                        </Button>
+                        <Button
+                          onClick={handleEditClick}
+                          variant="outlined"
+                          color="info"
+                          startIcon={<EditNoteOutlinedIcon />}
+                        >
+                          EDIT
+                        </Button>
+                      </>
+                    )}
+                  </Box>
+                  <Box sx={Styles.ThirdIconsGroup}>
+                    <IconButton onClick={handleLikeClick}>
+                      <ThumbUpAltRoundedIcon sx={{ color: markStatus === true ? "green" : "inherit" }} />
+                    </IconButton>
+                    <Typography color="#4baf50">{positiveMarks}</Typography>|
+                    <Typography color="#ba6163">-{negativeMarks}</Typography>
+                    <IconButton onClick={handleDislikeClick}>
+                      <ThumbDownAltRoundedIcon sx={{ color: markStatus === false ? "red" : "inherit" }} />
+                    </IconButton>
+                  </Box>
+                </CardContent>
+              </Card>
+            </CardContent>
+          </Card>
+        </Box>
       )}
     </Box>
   )

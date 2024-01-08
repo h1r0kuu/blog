@@ -14,17 +14,19 @@ const ProfileFollowCard: FC<ProfileFollowCardProps> = ({ follower }) => {
   const theme = useTheme()
   const backgroundColor = theme.palette.mode === "light" ? "secondary.200" : "divider"
   const borderColor = theme.palette.mode === "light" ? "secondary.200" : "divider"
+  const followed = follower.isMyProfileSubscribed
   const [isMyProfileSubscribed, setIsMyProfileSubscribed] = useState<boolean>(follower.isMyProfileSubscribed)
 
-  const handleFollow = () => {
-    if (follower.isMyProfileSubscribed) {
-      UserService.unfollowUser(follower.username).then((res) => {
-        setIsMyProfileSubscribed(false)
-      })
-    } else {
-      UserService.followUser(follower.username).then((res) => {
-        setIsMyProfileSubscribed(true)
-      })
+  const handleFollow = async () => {
+    try {
+      if (isMyProfileSubscribed) {
+        await UserService.unfollowUser(follower.username)
+      } else {
+        await UserService.followUser(follower.username)
+      }
+      setIsMyProfileSubscribed(!isMyProfileSubscribed)
+    } catch (error) {
+      console.error("Error toggling follow status:", error)
     }
   }
 

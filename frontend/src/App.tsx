@@ -22,7 +22,7 @@ import Profile from "./pages/Profile/Profile"
 import Settings from "./pages/Settings/Settings"
 import PostPage from "./pages/PostPage/PostPage"
 import PostCreationPage from "./pages/PostCreationPage/PostCreationPage"
-import SearchedPostsPage from "./pages/SearchedPostsPage/SearchedPostsPage";
+import SearchedPostsPage from "./pages/SearchedPostsPage/SearchedPostsPage"
 import PostUpdatePage from "./pages/PostUpdatePage/PostUpdatePage"
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material"
 import { commonTheme } from "./theme"
@@ -30,7 +30,7 @@ import ProtectedRoute from "./utils/ProtectedRoute"
 import NotFound from "./pages/NotFound/NotFound"
 import VerifyToken from "./pages/VerifyToken/VerifyToken"
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword"
-import UserFeedPage from "./pages/UserFeedPage/UserFeedPage";
+import UserFeedPage from "./pages/UserFeedPage/UserFeedPage"
 
 const App = () => {
   return (
@@ -38,7 +38,6 @@ const App = () => {
       <CssBaseline />
       <Routes>
         <Route path={HOME} element={<Home />} />
-
         <Route path={LOGIN} element={<Login />} />
         <Route path={REGISTRATION} element={<Registration />} />
         <Route path={`${PROFILE}/:username`} element={<Profile />} />
@@ -49,7 +48,6 @@ const App = () => {
         <Route path={POST_CREATE} element={<PostCreationPage />} />
         <Route path={SEARCH_PAGE} element={<SearchedPostsPage />} />
         <Route path={USER_FEED} element={<UserFeedPage />} />
-
         {/*  AUTHORIZED USER ROUTES */}
         <Route element={<ProtectedRoute />}>
           <Route path={SETTINGS} element={<Settings />} />
