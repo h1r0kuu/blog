@@ -16,6 +16,7 @@ Wersja javy - 21
 4. Dodaj właściwości Postgresql do zmiennych środowiskowych intelliji [link](https://imgur.com/a/0CnKOE2)
 5. Utwórz konto dla firebase i dodaj właściwości do zmiennych środowiskowych intellij (BUCKET_NAME, GET_IMAGE_URL, KEY_FILENAME)
 [link](https://imgur.com/a/0CnKOE2)
+
 Przykład:
 ```
 BUCKET_NAME=bucket.appspot.com;
